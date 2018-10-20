@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\HotelsService;
 use BotMan\BotMan\BotMan;
+use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\ListTemplate;
@@ -64,20 +65,18 @@ class HotelsController extends Controller
     public function debug(BotMan $bot, $location, $check_in, $check_out)
     {
         $hotels = $this->hotels_service->searchFromDebug(compact('location', 'check_in', 'check_out'));
-        $hotels = json_decode($hotels);
+        $hotels = json_decode($hotels, true);
 
         $list = ListTemplate::create()
-            ->useCompactView()
-            ->addGlobalButton(ElementButton::create('view more')
-                ->url('http://test.at')
-            );
+            ->useCompactView();
 
-        foreach ($hotels as $hotel) {
-            $list->addElement(Element::create($hotel->property_name ?? 'N/A')
-                ->subtitle($hotel->property_name ?? 'N/A')
+        foreach ($hotels['results'] as $hotel) {
+            $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
+                ->subtitle($hotel['property_name'] ?? 'N/A')
                 ->image('https://picsum.photos/200/?random')
-                ->addButton(ElementButton::create('visit')
-                    ->url('https://helloromania.eu/hotel')
+                ->addButton(ElementButton::create('book now -'.$hotel['property_code'])
+                    ->payload('book.hotel '.$hotel['property_code'])
+                    ->type('postback')
                 )
             );
         }
@@ -85,6 +84,24 @@ class HotelsController extends Controller
         $bot->reply($list);
 
         //$bot->reply((string) count($hotels['results']));
+    }
+
+    public function test(BotMan $bot)
+    {
+        $bot->reply(ButtonTemplate::create('Do you want to know more about BotMan?')
+            ->addButton(ElementButton::create('Tell me more')
+                ->type('postback')
+                ->payload('tellmemore')
+            )
+            ->addButton(ElementButton::create('Show me the docs')
+                ->url('http://botman.io/')
+            )
+        );
+    }
+
+    public function book(BotMan $bot, $property_code)
+    {
+        $bot->reply($property_code);
     }
 
 }

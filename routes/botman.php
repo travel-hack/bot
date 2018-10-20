@@ -21,6 +21,8 @@ $botman->hears('Start conversation', BotManController::class.'@startConversation
  */
 //$botman->hears('hotel.search', HotelsController::class . '@botman')->middleware($dialogflow);
 $botman->hears('search hotels in {location} between {check_in} and {check_out}', HotelsController::class . '@debug');
+$botman->hears('book.hotel {property_code}', HotelsController::class . '@book');
+$botman->hears('test', HotelsController::class . '@test');
 /**
  * Bookings
  */
