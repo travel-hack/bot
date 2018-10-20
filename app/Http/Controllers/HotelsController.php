@@ -74,7 +74,7 @@ class HotelsController extends Controller
             $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
                 ->subtitle($hotel['property_name'] ?? 'N/A')
                 ->image('https://picsum.photos/200/?random')
-                ->addButton(ElementButton::create('book now')
+                ->addButton(ElementButton::create('book now -'.$hotel['property_code'])
                     ->payload('book.hotel '.$hotel['property_code'])
                     ->type('postback')
                 )
