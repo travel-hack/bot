@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Booking extends Model
 {
@@ -12,4 +13,13 @@ class Booking extends Model
     protected $casts = [
         'data' => 'array'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (Model $model) {
+            $model->booking_id = Str::random(16);
+        });
+    }
 }
