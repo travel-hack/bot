@@ -13,5 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         factory(App\Booking::class, 5)->create();
         factory(App\Contract::class, 5)->create();
+        factory(App\Player::class, 5)->create();
+
     }
 }

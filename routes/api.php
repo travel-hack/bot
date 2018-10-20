@@ -19,4 +19,7 @@ Route::middleware([/*'auth:api'*/])->group(function () {
     Route::get('hotels/get-by-coords', 'HotelsController@getByCoords');
     Route::get('hotels/search', 'HotelsController@search');
 
+    Route::get('/players', "PlayerController@allPlayers");
+    Route::get('/player/{id}', "PlayerController@getPlayer");
+    Route::put('/player/{id}', "PlayerController@updatePlayer");
 });
