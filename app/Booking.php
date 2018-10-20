@@ -8,4 +8,8 @@ class Booking extends Model
 {
     protected $table = 'bookings';
     protected $guarded = [];
+
+    protected $casts = [
+        'data' => 'array'
+    ];
 }
