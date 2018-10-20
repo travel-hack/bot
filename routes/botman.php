@@ -28,7 +28,7 @@ $botman->hears('(cancel|delete)? (booking|book|reservation|rezervation|resa) {id
 /**
  * Hotel search
  */
-$dialogflow = Dialogflow::create('913d9d2423d74322a7af72d0ad47aafc')->listenForAction();
+/*$dialogflow = Dialogflow::create('913d9d2423d74322a7af72d0ad47aafc')->listenForAction();
 $botman->middleware->received($dialogflow);
 
-$botman->hears('hotel.search', HotelsController::class . '@botman')->middleware($dialogflow);
+$botman->hears('hotel.search', HotelsController::class . '@botman')->middleware($dialogflow);*/

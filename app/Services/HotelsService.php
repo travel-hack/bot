@@ -45,12 +45,12 @@ class HotelsService
 
     public function searchFromBotman(array $message)
     {
-        [$check_in, $check_out] = explode('/', $message['period']);
+        $period = explode('/', $message['period']);
 
         $query = [
             'query' => $message['location']->city ?? null,
-            'check_in' => $check_in,
-            'check_out' => $check_out,
+            'check_in' => $period[0],
+            'check_out' => $period[1] ?? '2018-10-10',
         ];
 
         return $this->search($query);
