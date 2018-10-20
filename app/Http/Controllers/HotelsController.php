@@ -67,17 +67,15 @@ class HotelsController extends Controller
         $hotels = json_decode($hotels, true);
 
         $list = ListTemplate::create()
-            ->useCompactView()
-            ->addGlobalButton(ElementButton::create('view more')
-                ->url('http://test.at')
-            );
+            ->useCompactView();
 
         foreach ($hotels['results'] as $hotel) {
             $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
                 ->subtitle($hotel['property_name'] ?? 'N/A')
                 ->image('https://picsum.photos/200/?random')
-                ->addButton(ElementButton::create('visit')
-                    ->url('https://helloromania.eu/hotel')
+                ->addButton(ElementButton::create('book now')
+                    ->payload('book.hotel '.$hotel['property_code'])
+                    ->type('postback')
                 )
             );
         }
@@ -85,6 +83,11 @@ class HotelsController extends Controller
         $bot->reply($list);
 
         //$bot->reply((string) count($hotels['results']));
+    }
+
+    public function book(BotMan $bot, $property_code)
+    {
+        $bot->reply($property_code);
     }
 
 }
