@@ -38,7 +38,7 @@ class HotelsController extends Controller
         $message = $bot->getMessage()->getExtras();
 
         $hotels = $this->hotels_service->searchFromBotman($message['apiParameters']);
-        $hotels = json_decode($hotels, true);
+        $hotels = json_decode($hotels);
 
         $list = ListTemplate::create()
             ->useCompactView()
@@ -47,8 +47,34 @@ class HotelsController extends Controller
             );
 
         foreach ($hotels as $hotel) {
-            $list->addElement(Element::create($hotel['property_name'])
-                ->subtitle($hotel['property_name'])
+            $list->addElement(Element::create($hotel->property_name ?? 'N/A')
+                ->subtitle($hotel->property_name ?? 'N/A')
+                ->image('https://picsum.photos/200/?random')
+                ->addButton(ElementButton::create('visit')
+                    ->url('https://helloromania.eu/hotel')
+                )
+            );
+        }
+
+        $bot->reply($list);
+
+        //$bot->reply((string) count($hotels['results']));
+    }
+
+    public function debug(BotMan $bot, $location, $check_in, $check_out)
+    {
+        $hotels = $this->hotels_service->searchFromDebug(compact('location', 'check_in', 'check_out'));
+        $hotels = json_decode($hotels);
+
+        $list = ListTemplate::create()
+            ->useCompactView()
+            ->addGlobalButton(ElementButton::create('view more')
+                ->url('http://test.at')
+            );
+
+        foreach ($hotels as $hotel) {
+            $list->addElement(Element::create($hotel->property_name ?? 'N/A')
+                ->subtitle($hotel->property_name ?? 'N/A')
                 ->image('https://picsum.photos/200/?random')
                 ->addButton(ElementButton::create('visit')
                     ->url('https://helloromania.eu/hotel')

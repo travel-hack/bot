@@ -57,6 +57,18 @@ class HotelsService
         return $this->search($query);
     }
 
+    public function searchFromDebug(array $message)
+    {
+        $query = [
+            'query' => $message['location'],
+            'check_in' => '2018-'.$message['check_in'],
+            'check_out' => '2018-'.$message['check_out'],
+            'number_of_results' => 4,
+        ];
+
+        return $this->search($query);
+    }
+
     public function getByCoords(array $query)
     {
         $query['apikey'] = $this->key;
