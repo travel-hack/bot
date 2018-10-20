@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use BotMan\BotMan\BotMan;
 use App\Booking;
 use function GuzzleHttp\json_decode;
+use Illuminate\Support\Collection;
+
+use BotMan\Drivers\Facebook\Extensions\ListTemplate;
+use BotMan\Drivers\Facebook\Extensions\Element;
+use BotMan\Drivers\Facebook\Extensions\ElementButton;
 
 class BookingController extends Controller
 {
@@ -33,12 +38,7 @@ class BookingController extends Controller
     {
         $bookings = Booking::all();
 
-        $response = "All Bookings: ";
-
-        foreach ($bookings as $booking) {
-            $response = $response . "\n" . $booking->booking_id;
-        }
-        $bot->reply($response);
+        $this->replyWithTemplate($bot, $bookings);
     }
 
     public function showBookings(BotMan $bot, string $booking_id)
@@ -55,5 +55,24 @@ class BookingController extends Controller
         if($success) {
             $bot->reply("Cancelled id " . $booking_id);
         }
+    }
+    
+    protected function replyWithTemplate(BotMan $bot, Collection $collection) 
+    {
+        $bot->reply(ListTemplate::create()
+            ->useCompactView()
+            ->addGlobalButton(ElementButton::create('view more')
+                ->url('http://test.at'))
+            ->addElement(Element::create('BotMan Documentation')
+                ->subtitle('All about BotMan')
+                ->image('http://botman.io/img/botman-body.png')
+                ->addButton(ElementButton::create('tell me more')
+                    ->payload('tellmemore')
+                    ->type('postback')))
+            ->addElement(Element::create('BotMan Laravel Starter')
+                ->subtitle('This is the best way to start with Laravel and BotMan')
+                ->image('http://botman.io/img/botman-body.png')
+                ->addButton(ElementButton::create('visit')
+                    ->url('https://github.com/mpociot/botman-laravel-starter'))));
     }
 }
