@@ -15,17 +15,22 @@ class PlayerController extends Controller
      */
     public function allPlayers()
     {
-        $players = Player::all();
-        return response()->json($players);
+        return Player::all();
     }
     
     public function getPlayer(int $id) 
     {
-        
+        return Player::find($id);
     }
 
-    public function updatePlayer(int $id, array $data)
+    public function updatePlayer(int $id, Request $request)
     {
-
+        $player = Player::find($id);
+                
+        $player->update($request->all());
+        
+        if($player->save()) {
+            return Player::find($id);
+        }
     }
 }
