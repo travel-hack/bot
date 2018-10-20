@@ -18,7 +18,7 @@ class PlacesService
     {
         $place = $this->places->textSearch($query)->toArray();
 
-        $result = $place['results'][0]['geometry']['location'] ?? null;
+        $result = $place['results'][0]['geometry'] ?? null;
 
         return $result;
     }
