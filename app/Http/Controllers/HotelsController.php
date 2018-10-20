@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\HotelsService;
 use BotMan\BotMan\BotMan;
+use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\ListTemplate;
@@ -83,6 +84,19 @@ class HotelsController extends Controller
         $bot->reply($list);
 
         //$bot->reply((string) count($hotels['results']));
+    }
+
+    public function test(BotMan $bot)
+    {
+        $bot->reply(ButtonTemplate::create('Do you want to know more about BotMan?')
+            ->addButton(ElementButton::create('Tell me more')
+                ->type('postback')
+                ->payload('tellmemore')
+            )
+            ->addButton(ElementButton::create('Show me the docs')
+                ->url('http://botman.io/')
+            )
+        );
     }
 
     public function book(BotMan $bot, $property_code)
