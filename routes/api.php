@@ -16,5 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware([/*'auth:api'*/])->group(function () {
 
     Route::get('places/search', 'PlacesController@search');
+    Route::get('hotels/get-by-coords', 'HotelsController@getByCoords');
+    Route::get('hotels/search', 'HotelsController@search');
 
 });
