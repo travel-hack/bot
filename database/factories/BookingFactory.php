@@ -21,5 +21,6 @@ $factory->define(App\Booking::class, function (Faker $faker) {
         'booking_id' => randomString(),
         'hotel_id'   => randomString(10),
         'data'       => json_encode(["column1" => $faker->word, "column2" => $faker->word, "column3" => $faker->word]),
+        'status'     => $faker->randomElement(['active', 'cancelled'])
     ];
 });

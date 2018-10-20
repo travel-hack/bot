@@ -38,7 +38,6 @@ class BookingController extends Controller
         foreach ($bookings as $booking) {
             $response = $response . "\n" . $booking->booking_id;
         }
-
         $bot->reply($response);
     }
 
