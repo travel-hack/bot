@@ -25,9 +25,20 @@ class HotelsService
         $query['south_west_corner'] = "{$place['viewport']['southwest']['lat']},{$place['viewport']['southwest']['lng']}";
         $query['north_east_corner'] = "{$place['viewport']['northeast']['lat']},{$place['viewport']['northeast']['lng']}";
 
-        $response = $this->client->get($this->url, [
-            'query' => $query,
-        ]);
+        $amenities = '';
+        if (isset($query['amenities'])) {
+            foreach(explode(',', $query['amenities']) as $term) {
+                $term = $this->matchAmenity($term) ?? $term;
+                $amenities .= "&amenity=$term";
+            }
+            unset($query['amenities']);
+        }
+
+        $query = http_build_query($query);
+
+        $full_url = $this->url .'?'. $query . $amenities;
+
+        $response = $this->client->get($full_url);
 
         return $response->getBody()->getContents();
     }
@@ -41,5 +52,35 @@ class HotelsService
         ]);
 
         return $response->getBody()->getContents();
+    }
+
+    public function matchAmenity(string $term)
+    {
+        $amenities = [
+            'accessible' => 'ACCESSIBLE_FACILITIES',
+            'ballroom' => 'BALLROOM',
+            'car-rental' => 'CAR_RENTAL',
+            'casino' => 'CASINO',
+            'conference' => 'CONFERENCE_FACILITIES',
+            'doctor' => 'DOCTOR_ON_CALL',
+            'elevator' => 'ELEVATORS',
+            'free-internet' => 'FREE_HIGH_SPEED_INTERNET',
+            'gym' => 'GYM',
+            'wi-fi' => 'HOTSPOTS',
+            'internet' => 'INTERNET_SERVICES',
+            'jacuzzi' => 'JACUZZI',
+            'bar' => 'LOUNGE_BARS',
+            'massage' => 'MASSAGE_SERVICES',
+            'non-smoking' => 'NON_SMOKING_ROOM',
+            'parking' => 'PARKING',
+            'pets' => 'PETS_ALLOWED',
+            'pool' => 'POOL',
+            'restaurant' => 'RESTAURANT',
+            'room-service' => 'ROOM_SERVICE',
+            'sauna' => 'SAUNA',
+            'spa' => 'SPA',
+        ];
+
+        return $amenities[$term] ?? null;
     }
 }
