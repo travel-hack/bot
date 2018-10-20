@@ -7,12 +7,7 @@ use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Player  $player
-     * @return \Illuminate\Http\Response
-     */
+
     public function allPlayers()
     {
         return Player::all();
@@ -30,7 +25,7 @@ class PlayerController extends Controller
         $player->update($request->all());
         
         if($player->save()) {
-            return Player::find($id);
+            return $player;
         }
     }
 }
