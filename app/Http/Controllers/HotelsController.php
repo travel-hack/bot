@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Booking;
 use App\Services\HotelsService;
 use BotMan\BotMan\BotMan;
 use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
@@ -102,6 +103,18 @@ class HotelsController extends Controller
     public function book(BotMan $bot, $property_code)
     {
         $bot->reply($property_code);
+    }
+
+
+    public function bookNow(BotMan $bot, $property_code)
+    {
+        Booking::create([
+            'hotel_id' => $property_code,
+            'data' => [],
+            'status' => 'active'
+        ]);
+
+        $bot->reply('Booked: '. $property_code);
     }
 
 }
