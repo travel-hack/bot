@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c0cb59a8db8693dc8e966dc926ac7d2",
+    "content-hash": "8e5bf2f04d28d17bff79b6c4a08c6f7c",
     "packages": [
         {
             "name": "botman/botman",
@@ -82,6 +82,68 @@
                 "chatbot"
             ],
             "time": "2018-05-02T07:51:53+00:00"
+        },
+        {
+            "name": "botman/driver-facebook",
+            "version": "1.9.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/botman/driver-facebook.git",
+                "reference": "8071f777388de7cde8122a340acdab01694d517b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/botman/driver-facebook/zipball/8071f777388de7cde8122a340acdab01694d517b",
+                "reference": "8071f777388de7cde8122a340acdab01694d517b",
+                "shasum": ""
+            },
+            "require": {
+                "botman/botman": "~2.1|~3.0",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "botman/studio-addons": "~1.0",
+                "ext-curl": "*",
+                "illuminate/contracts": "~5.5.0",
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "BotMan\\Drivers\\Facebook\\Providers\\FacebookServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BotMan\\Drivers\\Facebook\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcel Pociot",
+                    "email": "m.pociot@gmail.com"
+                }
+            ],
+            "description": "Facebook Messenger driver for BotMan",
+            "homepage": "http://github.com/botman/driver-facebook",
+            "keywords": [
+                "Botman",
+                "Messenger",
+                "bot",
+                "facebook",
+                "facebook messenger"
+            ],
+            "time": "2018-10-04T06:45:12+00:00"
         },
         {
             "name": "botman/driver-web",
