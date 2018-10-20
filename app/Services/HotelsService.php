@@ -43,6 +43,19 @@ class HotelsService
         return $response->getBody()->getContents();
     }
 
+    public function searchFromBotman(array $message)
+    {
+        [$check_in, $check_out] = explode('/', $message['period']);
+
+        $query = [
+            'query' => $message['location']->city ?? null,
+            'check_in' => $check_in,
+            'check_out' => $check_out,
+        ];
+
+        return $this->search($query);
+    }
+
     public function getByCoords(array $query)
     {
         $query['apikey'] = $this->key;
