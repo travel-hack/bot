@@ -64,7 +64,7 @@ class HotelsController extends Controller
     public function debug(BotMan $bot, $location, $check_in, $check_out)
     {
         $hotels = $this->hotels_service->searchFromDebug(compact('location', 'check_in', 'check_out'));
-        $hotels = json_decode($hotels);
+        $hotels = json_decode($hotels, true);
 
         $list = ListTemplate::create()
             ->useCompactView()
@@ -72,9 +72,9 @@ class HotelsController extends Controller
                 ->url('http://test.at')
             );
 
-        foreach ($hotels as $hotel) {
-            $list->addElement(Element::create($hotel->property_name ?? 'N/A')
-                ->subtitle($hotel->property_name ?? 'N/A')
+        foreach ($hotels['results'] as $hotel) {
+            $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
+                ->subtitle($hotel['property_name'] ?? 'N/A')
                 ->image('https://picsum.photos/200/?random')
                 ->addButton(ElementButton::create('visit')
                     ->url('https://helloromania.eu/hotel')
