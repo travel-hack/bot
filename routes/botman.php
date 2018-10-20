@@ -4,12 +4,16 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HotelsController;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Middleware\UserInputLogger;
+use App\Http\Middleware\NewPlayers;
 
 //$dialogflow = Dialogflow::create('913d9d2423d74322a7af72d0ad47aafc')->listenForAction();
 $botman = resolve('botman');
 //$botman->middleware->received($dialogflow);
-$middleware = new UserInputLogger();
-$botman->middleware->received($middleware);
+$userInputLogger = new UserInputLogger();
+$newPlayers = new NewPlayers();
+
+$botman->middleware->received($userInputLogger);
+$botman->middleware->received($newPlayers);
 
 $botman->hears('Hi|Hello|Yo|Ola', function ($bot) {
     $bot->reply('Smells like a soon to be seasoned traveler :)');
