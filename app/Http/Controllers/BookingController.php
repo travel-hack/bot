@@ -93,7 +93,7 @@ class BookingController extends Controller
         }
     }
 
-    protected function replyWithTemplate(BotMan $bot, Collection $collection)
+    protected function replyWithTemplate(BotMan $bot, $collection)
     {
         $bot->reply(ListTemplate::create()
             ->useCompactView()
