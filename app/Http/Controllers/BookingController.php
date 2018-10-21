@@ -74,7 +74,7 @@ class BookingController extends Controller
             return;
         }
 
-        return $this->showOneBooking($booking);
+        return $this->showOneBooking($bot, $booking);
     }
 
     public function cancelBookings(BotMan $bot, string $booking_id)
@@ -105,7 +105,7 @@ class BookingController extends Controller
                     ->url('https://github.com/mpociot/botman-laravel-starter'))));
     }
 
-    protected function showOneBooking(Booking $booking)
+    protected function showOneBooking(BotMan $bot, Booking $booking)
     {
         $template = GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
