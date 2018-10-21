@@ -65,8 +65,31 @@ class BookingController extends Controller
     public function showBookings(BotMan $bot, string $booking_id)
     {
         $booking = Booking::where('booking_id', $booking_id)->first();
+        if (!$booking) {
+            $bot->reply('Ha! Nice try! No such booking :)');
+        }
 
-        $bot->reply("Booking :" . $booking->data);
+        $template = GenericTemplate::create()
+            ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
+            ->addElements([
+                Element::create('BotMan Documentation')
+                    ->subtitle('All about BotMan')
+                    ->image('https://www.clipartmax.com/png/middle/117-1179176_office-block-free-icon-office-building-flat-icon.png')
+                    ->addButton(ElementButton::create('visit')
+                        ->url('http://botman.io')
+                    )
+                    ->addButton(ElementButton::create('tell me more')
+                        ->payload('tellmemore')
+                        ->type('postback')
+                    ),
+                Element::create('BotMan Laravel Starter')
+                    ->subtitle('This is the best way to start with Laravel and BotMan')
+                    ->image('http://botman.io/img/botman-body.png')
+                    ->addButton(ElementButton::create('visit')
+                        ->url('https://github.com/mpociot/botman-laravel-starter')
+                    ),
+                ]);
+        $bot->reply($template);
     }
 
     public function cancelBookings(BotMan $bot, string $booking_id)

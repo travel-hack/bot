@@ -41,7 +41,7 @@ $botman->hears('(show|list)?\s?(me)?\s?(my)?\s(bookings|books|reservations|rezer
 $botman->hears('(show|list)?\s?(me)?\s?all\s?(my)?\s(bookings|books|reservations|rezervations|resa)', BookingController::class . '@allMyBookings');
 // show one booking
 $botman->hears('(show|display)? (booking|book|reservation|rezervation|resa) {id}', BookingController::class . '@showBookings');
-$botman->hears('book.show {id}', BookingController::class . '@cancelBookings');
+$botman->hears('book.show {id}', BookingController::class . '@showBookings');
 // cancel booking
 $botman->hears('(cancel|delete)? (booking|book|reservation|rezervation|resa) {id}', BookingController::class . '@cancelBookings');
 $botman->hears('book.cancel {id}', BookingController::class . '@cancelBookings');
