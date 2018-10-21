@@ -140,13 +140,14 @@ class HotelsController extends Controller
 
     protected function showOneHotel(BotMan $bot, $hotel)
     {
+        srand($hotel['property_code']);
         $template = GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
             ->addElements([
-                Element::create($hotel['property_name'] ?? 'N/A')
-                    ->subtitle($hotel['property_name'] ?? 'N/A')
+                Element::create($hotel['property_name'] ?? 'Ramada Grand Resort')
+                    ->subtitle($hotel['address']['line1'] ?? 'Downtown')
                     ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
-                    ->addButton(ElementButton::create('book now')
+                    ->addButton(ElementButton::create("book at \${$hotel['total_price']['amount']}")
                         ->payload('book.now ' . json_encode($this->extractPropertyData($hotel)))
                         ->type('postback')
                     )
@@ -164,10 +165,11 @@ class HotelsController extends Controller
         $list = ListTemplate::create()
             ->useCompactView();
         foreach ($hotels as $hotel) {
-            $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
-                ->subtitle($hotel['property_name'] ?? 'N/A')
+            srand($hotel['property_code']);
+            $list->addElement(Element::create($hotel['property_name'] ?? 'Ramada Grand Resort')
+                ->subtitle($hotel['address']['line1'] ?? 'Downtown')
                 ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
-                ->addButton(ElementButton::create('book now')
+                ->addButton(ElementButton::create("book at \${$hotel['total_price']['amount']}")
                     ->payload('book.now ' . json_encode($this->extractPropertyData($hotel)))
                     ->type('postback')
                 )

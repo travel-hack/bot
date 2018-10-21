@@ -120,6 +120,7 @@ class BookingController extends Controller
 
     protected function showOneBooking(BotMan $bot, Booking $booking)
     {
+        srand($booking->hotel_id);
         $template = GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
             ->addElements([
@@ -129,9 +130,9 @@ class BookingController extends Controller
                     ->addButton(ElementButton::create('view')
                         ->payload('book.show ' . $booking->id)
                         ->type('postback'))
-                    ->addButton(ElementButton::create('cancel')
+                    /*->addButton(ElementButton::create('cancel')
                         ->payload('book.cancel ' . $booking->id)
-                        ->type('postback')),
+                        ->type('postback')),*/
             ]);
         $bot->reply($template);
     }
@@ -146,6 +147,7 @@ class BookingController extends Controller
         $list = ListTemplate::create()
             ->useCompactView();
         foreach ($bookings as $booking) {
+            srand($booking->hotel_id);
             $list->addElement(Element::create('Booking')
                 ->subtitle("Booking $booking->id")
                 ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
