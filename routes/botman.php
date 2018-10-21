@@ -18,18 +18,8 @@ $userInputLogger = new UserInputLogger();
 
 $botman->middleware->received($userInputLogger);
 //$botman->middleware->heard($newPlayers);
+$botman->hears('Hi|Hello', BotManController::class . '@greetings');
 
-$botman->hears('Hi|Hello|Ola', function ($bot) {
-    try {
-        check_user($bot);
-
-        $bot->reply('Smells like a soon to be seasoned traveler :)');
-    } catch (\Exception $e) {
-        \Log::error($e->getMessage() . $e->getTraceAsString());
-        $bot->reply('Ooops! :)');
-        return $bot->reply($e->getMessage());
-    }
-});
 // $botman->hears('Start conversation', BotManController::class.'@startConversation');
 
 /**
