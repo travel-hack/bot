@@ -12,7 +12,7 @@ use BotMan\Drivers\Facebook\Extensions\ListTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 
-use App\Service\PlayerService;
+use App\Services\PlayerService;
 
 class BookingController extends Controller
 {
