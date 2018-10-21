@@ -29,13 +29,27 @@ class BookingController extends Controller
 
         $bookings = Booking::where('status', 'active')->get();
 
-        $response = "Active Bookings: ";
-
-        foreach($bookings as $booking) {
-             $response = $response . "\n" . $booking->booking_id;
+        $list = ListTemplate::create()
+            ->useCompactView();
+        foreach ($bookings as $book) {
+            $list->addElement(Element::create('Awesome Booking')
+                ->subtitle($booking->booking_id)
+                ->image('https://www.clipartmax.com/png/middle/117-1179176_office-block-free-icon-office-building-flat-icon.png')
+                ->addButton(ElementButton::create('cancel')
+                    ->payload('book.cancel ' . $booking->booking_id)
+                    ->type('postback')
+                )
+            );
         }
+        $bot->reply('list');
 
-        $bot->reply($response);
+        // $response = "Active Bookings: ";
+
+        // foreach($bookings as $booking) {
+        //      $response = $response . "\n" . $booking->booking_id;
+        // }
+
+        // $bot->reply($response);
     }
 
     public function allMyBookings(BotMan $bot)
