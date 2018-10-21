@@ -72,7 +72,13 @@ class BookingController extends Controller
                 return $bot->reply('This is akward Mr/Mrs ' . $user_id . '.I dont know who you are.');
             }
             
-            $bookings = Booking::where(['player_id' => $player->id])->get();
+            $bookings = Booking::where([
+                'player_id' => $player->id,
+                'status' => 'active',
+            ])
+                ->limit(4)
+                ->latest()
+                ->get();
 
             $this->replyWithBookings($bot, $bookings);
         } catch (\Exception $e) {
