@@ -158,7 +158,7 @@ class HotelsController extends Controller
             'hotel_image' => 'https://picsum.photos/200/200/?image=' . rand(1, 1000),
             'check_in' => $hotel['rooms'][0]['rates'][0]['start_date'],
             'check_out' => $hotel['rooms'][0]['rates'][0]['end_date'],
-            'price' => $hotel['total_price'],
+            'price' => $hotel['total_price']['amount'],
         ];
     }
 
