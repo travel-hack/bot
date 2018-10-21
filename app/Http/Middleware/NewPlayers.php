@@ -2,19 +2,18 @@
 
 namespace App\Http\Middleware;
 
-use BotMan\BotMan\Interfaces\Middleware\Received;
+use BotMan\BotMan\Interfaces\Middleware\Heard;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\BotMan;
 use App\Player;
 use Log;
 
-class NewPlayers implements Received
+class NewPlayers implements Heard
 {
-    public function received(IncomingMessage $message, $next, BotMan $bot)
+    public function heard(IncomingMessage $message, $next, BotMan $bot)
     {
         try {
             Log::info(json_encode($bot->getUser()));
-            Log::info(json_encode($bot->getSenderId()));
             return $next($message);
 
             $user = $bot->getUser();
