@@ -11,6 +11,7 @@ use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\ListTemplate;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 use Illuminate\Http\Request;
+use App\Player;
 
 class HotelsController extends Controller
 {
@@ -81,6 +82,20 @@ class HotelsController extends Controller
     public function bookNow(BotMan $bot, $property_code)
     {
         try {
+            check_user($bot);
+            $user = $bot->getUser();
+            $user_id = $user->getId();
+
+            \Log::info('User_id' . $user_id);
+
+            $player = Player::whereFacebookId($user_id)->first();
+
+            if (!$player) {
+                return $bot->reply('Who are you? ' . $user_id);
+            }
+
+            \Log::info(json_encode($player));
+
             Booking::create([
                 'hotel_id' => $property_code,
                 'data' => [],
