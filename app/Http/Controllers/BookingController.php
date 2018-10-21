@@ -29,8 +29,7 @@ class BookingController extends Controller
 
         $bookings = Booking::where('status', 'active')->get();
 
-        $bot->reply(json_encode($bookings->all()));
-        return;
+        return botman_log($bot, json_encode($bookings->all()));
 
         $list = ListTemplate::create()
             ->useCompactView();
