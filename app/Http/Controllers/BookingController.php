@@ -70,14 +70,20 @@ class BookingController extends Controller
         /*$message = $bot->getMessage()->getExtras();
 
         logger($bot->getMessage()->getText());*/
-        
-        $booking = Booking::find($id);
-        if (!$booking) {
-            $bot->reply('Ha! Nice try! No such booking :)');
-            return;
-        }
 
-        return $this->showOneBooking($bot, $booking);
+        try {
+            $booking = Booking::find($id);
+            if (!$booking) {
+                $bot->reply('Ha! Nice try! No such booking :)');
+                return;
+            }
+
+            return $this->showOneBooking($bot, $booking);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
     }
 
     public function cancelBooking(BotMan $bot, string $id)
@@ -85,10 +91,16 @@ class BookingController extends Controller
         /*$message = $bot->getMessage()->getExtras();
         $id = $message['apiParameters']['booking-id'];*/
 
-        $success = Booking::where('id', $id)->update(['status' => 'cancelled']);
+        try {
+            $success = Booking::where('id', $id)->update(['status' => 'cancelled']);
 
-        if($success) {
-            $bot->reply("Cancelled id " . $id);
+            if($success) {
+                $bot->reply("Cancelled id " . $id);
+            }
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
         }
     }
 
@@ -160,7 +172,7 @@ class BookingController extends Controller
 
     protected function replyWithBookings(BotMan $bot, $bookings)
     {
-        if ($bookins->count() == 0) {
+        if ($bookings->count() == 0) {
             return $bot->reply('No bookings were found!');
         }
         if ($bookings->count() == 1) {
