@@ -80,13 +80,20 @@ class HotelsController extends Controller
 
     public function bookNow(BotMan $bot, $property_code)
     {
-        Booking::create([
-            'hotel_id' => $property_code,
-            'data' => [],
-            'status' => 'active'
-        ]);
+        try {
+            \Log::info('creating booking');
+            Booking::create([
+                'hotel_id' => $property_code,
+                'data' => [],
+                'status' => 'active'
+            ]);
 
-        $bot->reply('Booked: '. $property_code);
+            $bot->reply('Booked: '. $property_code);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
     }
 
 
