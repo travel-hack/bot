@@ -13,8 +13,8 @@ class NewPlayers implements Received
     public function received(IncomingMessage $message, $next, BotMan $bot)
     {
         try {
-            Log::info($bot->getUser());
-            Log::info($bot->getSenderId());
+            Log::info(json_encode($bot->getUser()));
+            Log::info(json_encode($bot->getSenderId()));
             return $next($message);
 
             $user = $bot->getUser();
