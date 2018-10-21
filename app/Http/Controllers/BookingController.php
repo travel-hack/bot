@@ -169,9 +169,9 @@ class BookingController extends Controller
                 ->addButton(ElementButton::create('view')
                     ->payload('book.show ' . $booking->id)
                     ->type('postback'))
-                ->addButton(ElementButton::create('cancel')
-                    ->payload('book.cancel ' . $booking->id)
-                    ->type('postback'))
+                // ->addButton(ElementButton::create('cancel')
+                //     ->payload('book.cancel ' . $booking->id)
+                //     ->type('postback'))
             );
         }
         $bot->reply($list);
