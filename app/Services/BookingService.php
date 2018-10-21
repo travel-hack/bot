@@ -36,20 +36,21 @@ class BookingService
         $player->bookings_count = $player->bookings_count + 1;
         $player->bookings_total = $player->bookings_total + $booking->price;
 
-        $player->rating = floor((100 - $player->rating) * min($booking->price / ($player->bookings_total / ($player->bookings_count + 1)), 2) / 3);
+        $diff = floor((100 - $player->rating) * min($booking->price / ($player->bookings_total / ($player->bookings_count + 1)), 2) / 3);
 
         if ($rating >= $booking->contract->minimum_rating) {
             $booking->update(['status' => 'closed']);
             $booking->contract->update(['status' => 'closed']);
             $bot->reply('Thank you! We are happy that you enjoyed your stay! :)');
 
+            $player->rating = $player->rating + $diff;
         } else {
             $booking->update(['status' => 'closed']);
             $booking->contract->update(['status' => 'refunded']);
             $bot->reply('Thank you! We are sad that you did not enjoy your stay. :(');
             $bot->reply("Your refund (\${$booking->contract->refund}) has been processed.");
 
-            $player->rating = -$player->rating;
+            $player->rating = $player->rating - $diff;
         }
 
         $player->save();
