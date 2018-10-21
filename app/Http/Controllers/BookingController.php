@@ -72,7 +72,7 @@ class BookingController extends Controller
                 return $bot->reply('This is akward Mr/Mrs ' . $user_id . '.I dont know who you are.');
             }
             
-            $bookings = Booking::where(['player_id', $player->id])->get();
+            $bookings = Booking::where(['player_id' => $player->id])->get();
 
             $this->replyWithBookings($bot, $bookings);
         } catch (\Exception $e) {
@@ -152,9 +152,9 @@ class BookingController extends Controller
                 ->addButton(ElementButton::create('view')
                     ->payload('book.show ' . $booking->id)
                     ->type('postback'))
-                ->addButton(ElementButton::create('cancel')
-                    ->payload('book.cancel ' . $booking->id)
-                    ->type('postback'))
+                // ->addButton(ElementButton::create('cancel')
+                //     ->payload('book.cancel ' . $booking->id)
+                //     ->type('postback'))
             );
         }
         $bot->reply($list);

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Contract;
 use Illuminate\Http\Request;
+use App\Player;
 
 class ContractController extends Controller
 {
     public function allContracts() 
-    {
-        return Contract::all();
+    {        
+        return Contract::with(['player','booking'])->get();
     }
 
     public function getContract(string $contract_id)
