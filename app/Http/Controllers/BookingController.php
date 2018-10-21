@@ -31,7 +31,7 @@ class BookingController extends Controller
 
         $list = ListTemplate::create()
             ->useCompactView();
-        foreach ($bookings as $book) {
+        foreach ($bookings as $booking) {
             $list->addElement(Element::create('Awesome Booking')
                 ->subtitle($booking->booking_id)
                 ->image('https://www.clipartmax.com/png/middle/117-1179176_office-block-free-icon-office-building-flat-icon.png')
