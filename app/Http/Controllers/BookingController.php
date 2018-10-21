@@ -179,7 +179,7 @@ class BookingController extends Controller
             $user_id = $user->getId();
             $player = Player::whereFacebookId($user_id)->first();
 
-            $question = Question::create('Did you like your stay?')
+            $question = Question::create('Hope you’ve had a wonderful time at this hotel! Did you enjoy your stay?')
                 ->addButtons([
                     Button::create('Hell no!')->value('no'),
                     Button::create('Of course!')->value('yes'),

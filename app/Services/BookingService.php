@@ -47,7 +47,7 @@ class BookingService
         } else {
             $booking->update(['status' => 'closed']);
             $booking->contract->update(['status' => 'refunded']);
-            $bot->reply('Thank you! We are sad that you did not enjoy your stay. :(');
+            $bot->reply('Thank you! We appreciate your honest feedback!');
             $bot->reply("Your refund (\${$booking->contract->refund}) has been processed.");
 
             $player->rating = $player->rating - $diff;
