@@ -25,12 +25,11 @@ class BookingController extends Controller
 
     public function myBookings(BotMan $bot)
     {
-        (new PlayerService)->check($bot);
+        check_user($bot);
 
         $bookings = Booking::where('status', 'active')->get();
 
-        $bot->reply(json_encode($bookings->all()));
-        return;
+        return botman_log($bot, json_encode($bookings->all()));
 
         $list = ListTemplate::create()
             ->useCompactView();
@@ -93,7 +92,7 @@ class BookingController extends Controller
         }
     }
 
-    protected function replyWithTemplate(BotMan $bot, Collection $collection)
+    protected function replyWithTemplate(BotMan $bot, $collection)
     {
         $bot->reply(ListTemplate::create()
             ->useCompactView()
