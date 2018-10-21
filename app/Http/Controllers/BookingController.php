@@ -180,10 +180,13 @@ class BookingController extends Controller
             $user_id = $user->getId();
             $player = Player::whereFacebookId($user_id)->first();
 
-            $question = Question::create('Hope you’ve had a wonderful time at this hotel! Did you enjoy your stay?')
+            $question = Question::create('Hope you’ve had a wonderful time at this hotel! Please rate your stay:')
                 ->addButtons([
-                    Button::create('Hell no!')->value('no'),
-                    Button::create('Of course!')->value('yes'),
+                    Button::create('1')->value('1'),
+                    Button::create('2')->value('2'),
+                    Button::create('3')->value('3'),
+                    Button::create('4')->value('4'),
+                    Button::create('5')->value('5'),
                 ]);
 
             $booking_service = new BookingService;
@@ -194,10 +197,10 @@ class BookingController extends Controller
                         $value = $answer->getValue(); // will be either 'yes' or 'no'
                         $text = $answer->getText(); // will be either 'Of course' or 'Hell no!'
 
-                        if ($value === 'yes') {
-                            $booking_service->review($bot, 5, $id, $player);
+                        if ($value >= 3) {
+                            $booking_service->review($bot, $value, $id, $player);
                         } else {
-                            $booking_service->review($bot, 1, $id, $player);
+                            $booking_service->review($bot, $value, $id, $player);
                         }
                     }
                 } catch (\Exception $e) {
