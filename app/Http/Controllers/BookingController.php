@@ -30,6 +30,9 @@ class BookingController extends Controller
 
         $bookings = Booking::where('status', 'active')->get();
 
+        $bot->reply(print_r($bookings, true));
+        return;
+
         $list = ListTemplate::create()
             ->useCompactView();
         foreach ($bookings as $booking) {
