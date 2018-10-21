@@ -84,7 +84,11 @@ class HotelsController extends Controller
     public function custom(BotMan $bot, $location)
     {
         try {
-            $hotels = $this->hotels_service->searchFromDebug(compact('location', '11-20', '11-22'));
+            $hotels = $this->hotels_service->searchFromDebug([
+                'location' => $location, 
+                'check_in' => '11-20',
+                'check_out' => '11-22'
+            ]);
             $hotels = json_decode($hotels, true);
 
             return $this->replyWithHotels($bot, $hotels);
