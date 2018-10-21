@@ -146,7 +146,7 @@ class HotelsController extends Controller
 
     protected function showHotelList(BotMan $bot, $hotels)
     {
-        $count = $hotels->count();
+        $count = count($hotels);
         if ($count < 2 || $count > 4) {
             return $bot->reply('Are you sure you want to see ' . $count . ' results?');
         }
