@@ -9,8 +9,8 @@ use App\Http\Middleware\NewPlayers;
 $botman = resolve('botman');
 
 
-//$dialogflow = Dialogflow::create('913d9d2423d74322a7af72d0ad47aafc')->listenForAction();
-//$botman->middleware->received($dialogflow);
+$dialogflow = Dialogflow::create('913d9d2423d74322a7af72d0ad47aafc')->listenForAction();
+$botman->middleware->received($dialogflow);
 
 
 $userInputLogger = new UserInputLogger();
@@ -32,6 +32,13 @@ $botman->hears('search hotels in {location} between {check_in} and {check_out}',
 $botman->hears('book.hotel {property_code}', HotelsController::class . '@book');
 $botman->hears('test', HotelsController::class . '@test');
 $botman->hears('book.now {property_code}', HotelsController::class . '@bookNow');
+
+
+
+$botman->hears('show.booking', BookingController::class . '@showBookings');
+$botman->hears('cancel.booking', BookingController::class . '@cancelBookings');
+
+
 /**
  * Bookings
  */

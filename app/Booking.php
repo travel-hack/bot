@@ -19,7 +19,7 @@ class Booking extends Model
         parent::boot();
 
         static::creating(function (Model $model) {
-            $model->booking_id = Str::random(16);
+            $model->booking_id = Str::upper(Str::random(5));
         });
     }
 }

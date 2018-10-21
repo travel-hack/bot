@@ -69,7 +69,7 @@ class BookingController extends Controller
 
     public function showBookings(BotMan $bot, string $booking_id)
     {
-        $booking = Booking::where('booking_id', $booking_id)->first();
+        $booking = Booking::find($booking_id);
         if (!$booking) {
             $bot->reply('Ha! Nice try! No such booking :)');
         }
