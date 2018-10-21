@@ -6,12 +6,12 @@ use Illuminate\Http\Request;
 use BotMan\BotMan\BotMan;
 use App\Booking;
 use function GuzzleHttp\json_decode;
-use Illuminate\Support\Collection;
 
 use BotMan\Drivers\Facebook\Extensions\ListTemplate;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
+use App\Services\PlayerService;
 
 
 class BookingController extends Controller
@@ -25,7 +25,7 @@ class BookingController extends Controller
 
     public function myBookings(BotMan $bot)
     {
-        check_user($bot);
+        (new PlayerService)->check($bot);
 
         $bookings = Booking::where('status', 'active')->get();
 
@@ -36,14 +36,14 @@ class BookingController extends Controller
             ->useCompactView();
         foreach ($bookings as $booking) {
             $list->addElement(Element::create('Awesome Booking')
-                ->subtitle($booking->booking_id)
+                ->subtitle($booking->id)
                 ->image('https://www.clipartmax.com/png/middle/117-1179176_office-block-free-icon-office-building-flat-icon.png')
                 ->addButton(ElementButton::create('view')
-                    ->payload('book.show ' . $booking->booking_id)
+                    ->payload('book.show ' . $booking->id)
                     ->type('postback')
                 )
                 // ->addButton(ElementButton::create('cancel')
-                //     ->payload('book.cancel ' . $booking->booking_id)
+                //     ->payload('book.cancel ' . $booking->id)
                 //     ->type('postback')
                 // )
             );
@@ -53,7 +53,7 @@ class BookingController extends Controller
         // $response = "Active Bookings: ";
 
         // foreach($bookings as $booking) {
-        //      $response = $response . "\n" . $booking->booking_id;
+        //      $response = $response . "\n" . $booking->id;
         // }
 
         // $bot->reply($response);
@@ -66,10 +66,10 @@ class BookingController extends Controller
         $this->replyWithTemplate($bot, $bookings);
     }
 
-    public function showBooking(BotMan $bot, string $booking_id)
+    public function showBooking(BotMan $bot, string $id)
     {
         $message = $bot->getMessage()->getExtras();
-
+        
         $booking = Booking::find($message['apiParameters']['booking-id']);
         if (!$booking) {
             $bot->reply('Ha! Nice try! No such booking :)');
@@ -82,12 +82,12 @@ class BookingController extends Controller
     public function cancelBooking(BotMan $bot)
     {
         $message = $bot->getMessage()->getExtras();
-        $booking_id = $message['apiParameters']['booking-id'];
+        $id = $message['apiParameters']['booking-id'];
 
-        $success = Booking::where('booking_id', $booking_id)->update(['status' => 'cancelled']);
+        $success = Booking::where('id', $id)->update(['status' => 'cancelled']);
 
         if($success) {
-            $bot->reply("Cancelled id " . $booking_id);
+            $bot->reply("Cancelled id " . $id);
         }
     }
 
@@ -143,13 +143,13 @@ class BookingController extends Controller
             ->useCompactView();
         foreach ($bookings as $booking) {
             $list->addElement(Element::create('Awesome Booking')
-                ->subtitle($booking->booking_id)
+                ->subtitle($booking->id)
                 ->image('https://www.clipartmax.com/png/middle/117-1179176_office-block-free-icon-office-building-flat-icon.png')
                 ->addButton(ElementButton::create('view')
-                    ->payload('book.show ' . $booking->booking_id)
+                    ->payload('book.show ' . $booking->id)
                     ->type('postback'))
                 // ->addButton(ElementButton::create('cancel')
-                //     ->payload('book.cancel ' . $booking->booking_id)
+                //     ->payload('book.cancel ' . $booking->id)
                 //     ->type('postback')
                 // )
             );
