@@ -72,7 +72,13 @@ class BookingController extends Controller
                 return $bot->reply('This is akward Mr/Mrs ' . $user_id . '.I dont know who you are.');
             }
             
-            $bookings = Booking::where(['player_id' => $player->id])->get();
+            $bookings = Booking::where([
+                'player_id' => $player->id,
+                'status' => 'active',
+            ])
+                ->limit(4)
+                ->latest()
+                ->get();
 
             $this->replyWithBookings($bot, $bookings);
         } catch (\Exception $e) {
@@ -120,13 +126,12 @@ class BookingController extends Controller
 
     protected function showOneBooking(BotMan $bot, Booking $booking)
     {
-        srand($booking->hotel_id);
         $template = GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
             ->addElements([
                 Element::create('Booking')
                     ->subtitle("Booking $booking->id")
-                    ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
+                    ->image($booking->hotel_image)
                     ->addButton(ElementButton::create('view')
                         ->payload('book.show ' . $booking->id)
                         ->type('postback'))
@@ -147,10 +152,9 @@ class BookingController extends Controller
         $list = ListTemplate::create()
             ->useCompactView();
         foreach ($bookings as $booking) {
-            srand($booking->hotel_id);
             $list->addElement(Element::create('Booking')
                 ->subtitle("Booking $booking->id")
-                ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
+                ->image($booking->hotel_image)
                 ->addButton(ElementButton::create('view')
                     ->payload('book.show ' . $booking->id)
                     ->type('postback'))

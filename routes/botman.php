@@ -22,7 +22,7 @@ $botman->middleware->received($userInputLogger);
 $botman->hears('Hi|Hello|Ola', function ($bot) {
     try {
         check_user($bot);
-        
+
         $bot->reply('Smells like a soon to be seasoned traveler :)');
     } catch (\Exception $e) {
         \Log::error($e->getMessage() . $e->getTraceAsString());
@@ -38,7 +38,7 @@ $botman->hears('Hi|Hello|Ola', function ($bot) {
 // $botman->hears('hotel.search', HotelsController::class . '@botman')->middleware($dialogflow);
 // $botman->hears('search hotels in {location} between {check_in} and {check_out}', HotelsController::class . '@debug');
 
-$botman->hears('(.*)(search|hotel|place|find|go)(.*)(in|to) {location}', HotelsController::class . '@custom');
+$botman->hears('(.*)(search|hotel|place|find|go|take)(.*)(in|to) {location}', HotelsController::class . '@custom');
 
 /*$botman->hears('book.hotel {property_code}', HotelsController::class . '@book');
 $botman->hears('test', HotelsController::class . '@test');*/
