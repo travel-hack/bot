@@ -79,6 +79,18 @@ class HotelsController extends Controller
         }
     }
 
+
+    public function custom(BotMan $bot, $location)
+    {
+        try {
+            return botman_log($bot, $location);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
+    }
+    
     public function bookNow(BotMan $bot, $data)
     {
         try {
