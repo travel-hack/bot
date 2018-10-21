@@ -23,6 +23,8 @@ class PlayerService
         $firstname = $user->getFirstName();
         $lastname  = $user->getLastName();
 
+        \Log::info('user info' . print_r($user->getInfo(), true));
+
         $newUser = Player::where('facebook_id', $user_id)->get();
 
         if($newUser->isEmpty()) {
