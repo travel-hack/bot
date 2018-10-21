@@ -74,10 +74,8 @@ class BookingController extends Controller
             
             $bookings = $user->bookings()->get();
 
-            $bot->reply(json_encode($bookings));
-            
+            $this->replyWithBookings($bot, $bookings);
         } catch (\Exception $e) {
-            
             \Log::error($e->getMessage() . $e->getTraceAsString());
             $bot->reply('Ooops! :)');
             return $bot->reply($e->getMessage());
@@ -144,43 +142,36 @@ class BookingController extends Controller
         $template = GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
             ->addElements([
-                Element::create('BotMan Documentation')
-                    ->subtitle('All about BotMan')
-                    ->image('https://www.clipartmax.com/png/middle/117-1179176_office-block-free-icon-office-building-flat-icon.png')
-                    ->addButton(ElementButton::create('visit')
-                        ->url('http://botman.io'))
-                    ->addButton(ElementButton::create('tell me more')
-                        ->payload('tellmemore')
+                Element::create('Booking')
+                    ->subtitle("Booking $booking->id")
+                    ->addButton(ElementButton::create('view')
+                        ->payload('book.show ' . $booking->id)
+                        ->type('postback'))
+                    ->addButton(ElementButton::create('cancel')
+                        ->payload('book.cancel ' . $booking->id)
                         ->type('postback')),
-                Element::create('BotMan Laravel Starter')
-                    ->subtitle('This is the best way to start with Laravel and BotMan')
-                    ->image('http://botman.io/img/botman-body.png')
-                    ->addButton(ElementButton::create('visit')
-                        ->url('https://github.com/mpociot/botman-laravel-starter')),
             ]);
         $bot->reply($template);
     }
 
     protected function showBookingList(BotMan $bot, $bookings)
     {
-        $count = $bookings->count();
+        /*$count = $bookings->count();
         if ($count < 2 || $count > 4) {
             return $bot->reply('Are you sure you want to see ' . $count . ' results?');
-        }
+        }*/
 
         $list = ListTemplate::create()
             ->useCompactView();
         foreach ($bookings as $booking) {
-            $list->addElement(Element::create('Awesome Booking')
-                ->subtitle($booking->id)
-                ->image('https://www.clipartmax.com/png/middle/117-1179176_office-block-free-icon-office-building-flat-icon.png')
+            $list->addElement(Element::create('Booking')
+                ->subtitle("Booking $booking->id")
                 ->addButton(ElementButton::create('view')
                     ->payload('book.show ' . $booking->id)
                     ->type('postback'))
-                // ->addButton(ElementButton::create('cancel')
-                //     ->payload('book.cancel ' . $booking->id)
-                //     ->type('postback')
-                // )
+                ->addButton(ElementButton::create('cancel')
+                    ->payload('book.cancel ' . $booking->id)
+                    ->type('postback'))
             );
         }
         $bot->reply($list);
