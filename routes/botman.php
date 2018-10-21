@@ -27,13 +27,13 @@ $botman->hears('Hi|Hello|Yo|Ola', function ($bot) {
 /**
  * Hotel search
  */
-$botman->hears('hotel.search', HotelsController::class . '@botman')->middleware($dialogflow);
 $botman->hears('search hotels in {location} between {check_in} and {check_out}', HotelsController::class . '@debug');
 /*$botman->hears('book.hotel {property_code}', HotelsController::class . '@book');
 $botman->hears('test', HotelsController::class . '@test');*/
 $botman->hears('book.now {property_code}', HotelsController::class . '@bookNow');
 
 
+$botman->hears('hotel.search', HotelsController::class . '@botman')->middleware($dialogflow);
 $botman->hears('show.booking', BookingController::class . '@showBooking')->middleware($dialogflow);
 $botman->hears('cancel.booking', BookingController::class . '@cancelBooking')->middleware($dialogflow);
 

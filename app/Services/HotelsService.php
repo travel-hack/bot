@@ -50,7 +50,7 @@ class HotelsService
         $query = [
             'query' => $message['location']->city ?? null,
             'check_in' => $period[0],
-            'check_out' => $period[1] ?? '2018-10-10',
+            'check_out' => $period[1],
             'number_of_results' => 4,
         ];
 
