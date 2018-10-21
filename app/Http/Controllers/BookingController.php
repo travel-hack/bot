@@ -174,6 +174,11 @@ class BookingController extends Controller
     public function visit(BotMan $bot, $id)
     {
         try {
+            check_user($bot);
+            $user = $bot->getUser();
+            $user_id = $user->getId();
+            $player = Player::whereFacebookId($user_id)->first();
+
             $question = Question::create('Did you like your stay?')
                 ->addButtons([
                     Button::create('Hell no!')->value('no'),
@@ -182,16 +187,16 @@ class BookingController extends Controller
 
             $booking_service = new BookingService;
 
-            $bot->ask($question, function (Answer $answer) use ($bot, $id, $booking_service) {
+            $bot->ask($question, function (Answer $answer) use ($bot, $id, $booking_service, $player) {
                 try {
                     if ($answer->isInteractiveMessageReply()) {
                         $value = $answer->getValue(); // will be either 'yes' or 'no'
                         $text = $answer->getText(); // will be either 'Of course' or 'Hell no!'
 
                         if ($value === 'yes') {
-                            $booking_service->review($bot, 5, $id);
+                            $booking_service->review($bot, 5, $id, $player);
                         } else {
-                            $booking_service->review($bot, 1, $id);
+                            $booking_service->review($bot, 1, $id, $player);
                         }
                     }
                 } catch (\Exception $e) {
