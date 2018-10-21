@@ -165,4 +165,15 @@ class BookingController extends Controller
         }
         return $this->showBookingList($bot, $bookings);
     }
+
+    public function visit(BotMan $bot, $id)
+    {
+        try {
+            $bot->reply("visiting " . $id);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
+    }
 }
