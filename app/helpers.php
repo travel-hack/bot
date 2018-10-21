@@ -1,7 +1,6 @@
 <?php
 
-
 function check_user()
 {
-    logger('test');
+    Log::info('test');
 }
