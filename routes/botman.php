@@ -5,7 +5,6 @@ use App\Http\Controllers\HotelsController;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Middleware\UserInputLogger;
 use App\Http\Middleware\NewPlayers;
-use Log;
 
 $botman = resolve('botman');
 
@@ -47,9 +46,9 @@ $botman->hears('(cancel|delete)? (booking|book|reservation|rezervation|resa) {id
 
 $botman->hears('user', function ($bot) {
     try {
-        Log::info('user: ' . $bot->getSender());
+        logger('user: ' . $bot->getSender());
     } catch (\Exception $e) {
-        Log::error($e->getTraceAsString());
+        logger($e->getTraceAsString());
     }
     $bot->reply('Hello User!');
 });
