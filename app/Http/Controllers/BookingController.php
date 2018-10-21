@@ -13,6 +13,7 @@ use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use App\Services\PlayerService;
 use function GuzzleHttp\json_encode;
+use App\Player;
 
 
 class BookingController extends Controller
@@ -61,6 +62,7 @@ class BookingController extends Controller
 
     public function allMyBookings(BotMan $bot)
     {
+        myBookings
         try {
             check_user($bot);
             $user = $bot->getUser();

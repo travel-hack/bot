@@ -42,7 +42,7 @@ $botman->hears('book.now {property_code}', HotelsController::class . '@bookNow')
  * Bookings
  */
 // list active bookings
-$botman->hears('(show|list)?\s?(me)?\s?(my)?\s(bookings|books|reservations|rezervations|resa)', BookingController::class . '@myBookings');
+$botman->hears('(show|list)?\s?(me)?\s?(my)?\s(bookings|books|reservations|rezervations|resa)', BookingController::class . '@allMyBookings');
 // list all bookings
 $botman->hears('(show|list)?\s?(me)?\s?all\s?(my)?\s(bookings|books|reservations|rezervations|resa)', BookingController::class . '@allMyBookings');
 // show one booking
