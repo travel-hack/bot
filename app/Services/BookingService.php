@@ -28,16 +28,19 @@ class BookingService
             ]);
     }
 
-    public function review($rating, $booking_id)
+    public function review($bot, $rating, $booking_id)
     {
         $booking = Booking::find($booking_id);
 
         if ($rating >= $booking->contract->minimum_rating) {
             $booking->update(['status' => 'closed']);
             $booking->contract->update(['status' => 'closed']);
+            $bot->reply('Thank you! We are happy that you enjoyed your stay! :)');
         } else {
             $booking->update(['status' => 'closed']);
             $booking->contract->update(['status' => 'refunded']);
+            $bot->reply('Thank you! We are sad that you did not enjoy your stay. :(');
+            $bot->reply("Your refund (\${$booking->contract}) has been processed.");
         }
     }
 }

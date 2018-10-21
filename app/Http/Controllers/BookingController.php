@@ -147,7 +147,7 @@ class BookingController extends Controller
             ->useCompactView();
         foreach ($bookings as $booking) {
             $list->addElement(Element::create('Booking')
-                ->subtitle("Booking $booking->id")
+                ->subtitle("$booking->id at $booking->hotel_name")
                 ->image($booking->hotel_image)
                 ->addButton(ElementButton::create('view')
                     ->payload('book.show ' . $booking->id)
@@ -176,8 +176,8 @@ class BookingController extends Controller
         try {
             $question = Question::create('Did you like your stay?')
                 ->addButtons([
-                    Button::create('Of course')->value('yes'),
                     Button::create('Hell no!')->value('no'),
+                    Button::create('Of course!')->value('yes'),
                 ]);
 
             $booking_service = new BookingService;
@@ -189,12 +189,9 @@ class BookingController extends Controller
                         $text = $answer->getText(); // will be either 'Of course' or 'Hell no!'
 
                         if ($value === 'yes') {
-                            $booking_service->review(5, $id);
-                            $bot->reply('Thank you! We are happy that you enjoyed your stay!');
+                            $booking_service->review($bot, 5, $id);
                         } else {
-                            $booking_service->review(1, $id);
-                            $bot->reply('Thank you! We are sad that you did not enjoy your stay!');
-                            $bot->reply('Your refund has been processed.');
+                            $booking_service->review($bot, 1, $id);
                         }
                     }
                 } catch (\Exception $e) {
