@@ -61,6 +61,7 @@ class BotManController extends Controller
             "Hi $name! Do you know what the traveler and the tourist have in common? They both use TripChat! What’s your next stop?  8|",
             "Hi there $name! Happy to be your personal travel assistant! Where should we travel today? ;)" ,
         ];
+        
         $key = rand(0, count($answers) - 1);
         return $answers[$key];
     }
