@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Booking;
+use App\Contract;
 use App\Services\HotelsService;
 use BotMan\BotMan\BotMan;
 use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
@@ -120,9 +121,16 @@ class HotelsController extends Controller
             $data = \GuzzleHttp\json_decode($data, true);
             $data['player_id'] = $player->id;
 
-            Booking::create($data);
+            $booking = Booking::create($data);
 
-            $bot->reply('Booked: '. $data['hotel_id']);
+            $contract = Contract::create([
+                'booking_id' => $booking->id,
+                'player_id' => $player->id,
+                'minimum_rating' => 3,
+                'refund' => ($booking->price / 100) * 10,
+            ]);
+
+            $bot->reply("Booking ID: $booking->id");
         } catch (\Exception $e) {
             \Log::error($e->getMessage() . $e->getTraceAsString());
             $bot->reply('Ooops! :)');
