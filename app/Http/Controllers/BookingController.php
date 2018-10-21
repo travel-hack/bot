@@ -16,11 +16,6 @@ use App\Services\PlayerService;
 
 class BookingController extends Controller
 {
-    protected function __construct(PlayerService $player_service)
-    {
-        $this->player_service = $player_service;
-    }
-
     public function handle()
     {
         $botman = app('botman');
@@ -30,7 +25,7 @@ class BookingController extends Controller
 
     public function myBookings(BotMan $bot)
     {
-        $this->player_service->check($bot);
+        (new PlayerService())->check($bot);
 
         $bookings = Booking::where('status', 'active')->get();
 
