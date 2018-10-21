@@ -30,7 +30,8 @@ class BookingController extends Controller
 
         $bookings = Booking::where('status', 'active')->get();
 
-        $list = ListTemplate::create();
+        $list = ListTemplate::create()
+            ->useCompactView();
         foreach ($bookings as $booking) {
             $list->addElement(Element::create('Awesome Booking')
                 ->subtitle($booking->booking_id)
