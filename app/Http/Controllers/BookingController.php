@@ -12,6 +12,8 @@ use BotMan\Drivers\Facebook\Extensions\ListTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 
+use App\Service\PlayerService;
+
 class BookingController extends Controller
 {
     public function handle()
@@ -20,21 +22,23 @@ class BookingController extends Controller
 
         $botman->listen();
     }
-    
+
     public function myBookings(BotMan $bot)
     {
+        (new PlayerService())->check($bot);
+
         $bookings = Booking::where('status', 'active')->get();
 
         $response = "Active Bookings: ";
-        
+
         foreach($bookings as $booking) {
              $response = $response . "\n" . $booking->booking_id;
         }
-        
+
         $bot->reply($response);
     }
-    
-    public function allMyBookings(BotMan $bot) 
+
+    public function allMyBookings(BotMan $bot)
     {
         $bookings = Booking::all();
 
@@ -44,20 +48,20 @@ class BookingController extends Controller
     public function showBookings(BotMan $bot, string $booking_id)
     {
         $booking = Booking::where('booking_id', $booking_id)->first();
-                
+
         $bot->reply("Booking :" . $booking->data);
     }
 
     public function cancelBookings(BotMan $bot, string $booking_id)
     {
         $success = Booking::where('booking_id', $booking_id)->update(['status' => 'cancelled']);
-        
+
         if($success) {
             $bot->reply("Cancelled id " . $booking_id);
         }
     }
-    
-    protected function replyWithTemplate(BotMan $bot, Collection $collection) 
+
+    protected function replyWithTemplate(BotMan $bot, Collection $collection)
     {
         $bot->reply(ListTemplate::create()
             ->useCompactView()

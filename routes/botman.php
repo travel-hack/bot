@@ -14,10 +14,10 @@ $botman = resolve('botman');
 
 
 $userInputLogger = new UserInputLogger();
-$newPlayers = new NewPlayers();
+//$newPlayers = new NewPlayers();
 
 $botman->middleware->received($userInputLogger);
-$botman->middleware->heard($newPlayers);
+//$botman->middleware->heard($newPlayers);
 
 $botman->hears('Hi|Hello|Yo|Ola', function ($bot) {
     $bot->reply('Smells like a soon to be seasoned traveler :)');
