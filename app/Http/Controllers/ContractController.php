@@ -10,7 +10,7 @@ class ContractController extends Controller
 {
     public function allContracts() 
     {        
-        return Contract::with(['player','booking'])->get();
+        return Contract::with(['player','booking'])->orderBy('updated_at', 'desc')->get();
     }
 
     public function getContract(string $contract_id)
