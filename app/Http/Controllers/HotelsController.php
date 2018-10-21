@@ -72,6 +72,7 @@ class HotelsController extends Controller
 
             return $this->replyWithHotels($bot, $hotels);
         } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
             $bot->reply('Ooops! :)');
             return $bot->reply($e->getMessage());
         }
@@ -175,6 +176,7 @@ class HotelsController extends Controller
     protected function replyWithHotels(BotMan $bot, $hotels)
     {
         $num  = count($hotels['results']);
+        \Log::info('num: ' . $num);
         if ($num == 0) {
             return $bot->reply('No hotels were found!');
         }
