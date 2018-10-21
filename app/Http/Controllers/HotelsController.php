@@ -65,10 +65,15 @@ class HotelsController extends Controller
 
     public function debug(BotMan $bot, $location, $check_in, $check_out)
     {
-        $hotels = $this->hotels_service->searchFromDebug(compact('location', 'check_in', 'check_out'));
-        $hotels = json_decode($hotels, true);
+        try {
+            $hotels = $this->hotels_service->searchFromDebug(compact('location', 'check_in', 'check_out'));
+            $hotels = json_decode($hotels, true);
 
-        return $this->replyWithHotels($bot, $hotels);
+            return $this->replyWithHotels($bot, $hotels);
+        } catch (\Exception $e) {
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
 
         $bot->reply(substr(json_encode($hotels), 0, 200));
         return;
@@ -122,7 +127,7 @@ class HotelsController extends Controller
     }
 
 
-    protected function showOneHotel(BotMan $bot, Booking $hotel)
+    protected function showOneHotel(BotMan $bot, $hotel)
     {
         $template = GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
