@@ -130,7 +130,7 @@ class HotelsController extends Controller
                 'refund' => ($booking->price / 100) * 10,
             ]);
 
-            $bot->reply("Thank you $player->firstname, I went ahead and made a reservation for you for hotel $booking->hotel_name). Your Booking ID is $booking->id");
+            $bot->reply("Thank you $player->firstname, I went ahead and made a reservation for you for hotel $booking->hotel_name. Your Booking ID is $booking->id");
             
         } catch (\Exception $e) {
             \Log::error($e->getMessage() . $e->getTraceAsString());

@@ -117,7 +117,7 @@ class BookingController extends Controller
         $id = $message['apiParameters']['booking-id'];*/
 
         try {
-            $booking = Booking::where('id', $id);
+            $booking = Booking::find('id', $id);
             $b = Booking::where('id', $id)->update(['status' => 'cancelled']);
             $c = Contract::where('booking_id', $id)->update(['status' => 'closed']);
 
