@@ -34,4 +34,34 @@ class BotManController extends Controller
     {
         $bot->startConversation(new ExampleConversation());
     }
+    
+    public function greetings(BotMan $bot)
+    {
+        try {
+            
+            check_user($bot);
+            $user = $bot->getUser();
+            $name = $user->getFirstName();
+                        
+            $bot->reply($this->getMessage($name));
+            
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
+    }
+    
+    protected function getMessage($name)
+    {
+        $answers = [
+            "Hello $name! Seems to be cloudy today in Bucharest. How may I assist you? :)",
+            "Good day $name! Hope this hackaton is going great! Is there anything I can do for you today? :)",
+            "Greetings $name! Where would you like to travel? May I suggest Madrid?",
+            "Hi $name! Do you know what the traveler and the tourist have in common? They both use TripChat! What’s your next stop?  :)",
+            "Hi there $name! Happy to be your personal travel assistant! Where should we travel today?",
+        ];
+        $key = rand(0, count($answers) - 1);
+        return $answers[$key];
+    }
 }
