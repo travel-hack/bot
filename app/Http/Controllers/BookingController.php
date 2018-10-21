@@ -30,7 +30,7 @@ class BookingController extends Controller
 
         $bookings = Booking::where('status', 'active')->get();
 
-        $bot->reply(print_r($bookings, true));
+        $bot->reply(json_encode($bookings->all()));
         return;
 
         $list = ListTemplate::create()
