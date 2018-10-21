@@ -25,7 +25,7 @@ class BookingController extends Controller
 
     public function myBookings(BotMan $bot)
     {
-        (new PlayerService)->check($bot);
+        check_user($bot);
 
         $bookings = Booking::where('status', 'active')->get();
 
