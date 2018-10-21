@@ -28,7 +28,7 @@ $botman->hears('Hi|Hello|Yo|Ola', function ($bot) {
  * Hotel search
  */
 // $botman->hears('hotel.search', HotelsController::class . '@botman')->middleware($dialogflow);
-$botman->hears('search hotels in {location} between {check_in} and {check_out}', HotelsController::class . '@debug');
+// $botman->hears('search hotels in {location} between {check_in} and {check_out}', HotelsController::class . '@debug');
 
 $botman->hears('(.*)(search|hotel|place|find|go)(.*)(in|to) {location}', HotelsController::class . '@custom');
 
@@ -45,7 +45,7 @@ $botman->hears('book.now {property_code}', HotelsController::class . '@bookNow')
  * Bookings
  */
 // list active bookings
-$botman->hears('(show|list)?\s?(me)?\s?(my)?\s(bookings|books|reservations|rezervations|resa)', BookingController::class . '@myBookings');
+$botman->hears('(show|list)?\s?(me)?\s?(my)?\s(bookings|books|reservations|rezervations|resa)', BookingController::class . '@allMyBookings');
 // list all bookings
 $botman->hears('(show|list)?\s?(me)?\s?all\s?(my)?\s(bookings|books|reservations|rezervations|resa)', BookingController::class . '@allMyBookings');
 // show one booking

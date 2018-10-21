@@ -84,14 +84,17 @@ class HotelsController extends Controller
     public function custom(BotMan $bot, $location)
     {
         try {
-            return botman_log($bot, $location);
+            $hotels = $this->hotels_service->searchFromDebug(compact('location', '11-20', '11-22'));
+            $hotels = json_decode($hotels, true);
+
+            return $this->replyWithHotels($bot, $hotels);
         } catch (\Exception $e) {
             \Log::error($e->getMessage() . $e->getTraceAsString());
             $bot->reply('Ooops! :)');
             return $bot->reply($e->getMessage());
         }
     }
-    
+
     public function bookNow(BotMan $bot, $data)
     {
         try {
