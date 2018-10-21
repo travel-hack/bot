@@ -10,7 +10,7 @@ $botman = resolve('botman');
 
 
 $dialogflow = Dialogflow::create('913d9d2423d74322a7af72d0ad47aafc')->listenForAction();
-$botman->middleware->received($dialogflow);
+//$botman->middleware->received($dialogflow);
 
 
 $userInputLogger = new UserInputLogger();
