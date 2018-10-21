@@ -117,11 +117,12 @@ class BookingController extends Controller
         $id = $message['apiParameters']['booking-id'];*/
 
         try {
+            $booking = Booking::where('id', $id);
             $b = Booking::where('id', $id)->update(['status' => 'cancelled']);
             $c = Contract::where('booking_id', $id)->update(['status' => 'closed']);
 
             if($b && $c) {
-                $bot->reply("Cancelled id " . $id);
+                $bot->reply("I went ahead and canceled your booking $id with hotel $booking->hotel_name");
             }
         } catch (\Exception $e) {
             \Log::error($e->getMessage() . $e->getTraceAsString());
