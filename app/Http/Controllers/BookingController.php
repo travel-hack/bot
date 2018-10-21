@@ -190,8 +190,11 @@ class BookingController extends Controller
 
                         if ($value === 'yes') {
                             $booking_service->review(5, $id);
+                            $bot->reply('Thank you! We are happy that you enjoyed your stay!');
                         } else {
                             $booking_service->review(1, $id);
+                            $bot->reply('Thank you! We are sad that you did not enjoy your stay!');
+                            $bot->reply('Your refund has been processed.');
                         }
                     }
                 } catch (\Exception $e) {
