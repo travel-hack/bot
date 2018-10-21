@@ -17,4 +17,9 @@ class Booking extends Model
     protected $casts = [
         'data' => 'array'
     ];
+    
+    public function contract() 
+    {
+        return $this->hasOne('App\Contract');
+    }
 }
