@@ -16,10 +16,11 @@ class CreateContractsTable extends Migration
         Schema::create('contracts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('booking_id');
-            $table->string('user_id');
+            $table->string('player_id');
+            
             $table->integer('minimum_rating');
-            $table->decimal('expected_refund');
-            $table->string('status')->default('open');
+            $table->decimal('refund');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }

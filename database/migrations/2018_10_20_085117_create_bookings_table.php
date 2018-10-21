@@ -14,10 +14,18 @@ class CreateBookingsTable extends Migration
     public function up()
     {
         Schema::create('bookings', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('booking_id');
+            $table->string('id')->primary();
+            
             $table->string('hotel_id');
-            $table->json('data');
+            $table->string('hotel_name');
+            $table->string('hotel_image');
+            
+            $table->string('check_in');
+            $table->string('check_out');
+            
+            $table->decimal('price');
+            $table->string('player_id');
+            
             $table->string('status')->default('active');
             $table->timestamps();
         });

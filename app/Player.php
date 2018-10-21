@@ -5,8 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
-{
-    protected $table = 'players';
-    
+{    
     protected $guarded = [];
+    
+    public function bookings() 
+    {
+        return $this->hasMany('App\Models\Booking');
+    }
+    
+    public function contracts() 
+    {
+        return $this->hasMany('App\Models\Contracts');
+    }
 }

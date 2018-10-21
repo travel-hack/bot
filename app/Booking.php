@@ -4,22 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\CustomTraits\CustomId;
 
 class Booking extends Model
 {
-    protected $table = 'bookings';
+    use CustomId;
+    
     protected $guarded = [];
+    
+    public $incrementing  = false;
 
     protected $casts = [
         'data' => 'array'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function (Model $model) {
-            $model->booking_id = Str::upper(Str::random(5));
-        });
-    }
 }
