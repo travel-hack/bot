@@ -148,7 +148,7 @@ class BookingController extends Controller
             ->useCompactView();
         foreach ($bookings as $booking) {
             $list->addElement(Element::create('Booking')
-                ->subtitle("Booking $booking->id")
+                ->subtitle("$booking->id at $booking->hotel_name")
                 ->image($booking->hotel_image)
                 ->addButton(ElementButton::create('view')
                     ->payload('book.show ' . $booking->id)
@@ -175,27 +175,29 @@ class BookingController extends Controller
     public function visit(BotMan $bot, $id)
     {
         try {
-            $question = Question::create('Did you like your stay?')
+            check_user($bot);
+            $user = $bot->getUser();
+            $user_id = $user->getId();
+            $player = Player::whereFacebookId($user_id)->first();
+
+            $question = Question::create('Hope you’ve had a wonderful time at this hotel! Did you enjoy your stay?')
                 ->addButtons([
-                    Button::create('Of course')->value('yes'),
                     Button::create('Hell no!')->value('no'),
+                    Button::create('Of course!')->value('yes'),
                 ]);
 
             $booking_service = new BookingService;
 
-            $bot->ask($question, function (Answer $answer) use ($bot, $id, $booking_service) {
+            $bot->ask($question, function (Answer $answer) use ($bot, $id, $booking_service, $player) {
                 try {
                     if ($answer->isInteractiveMessageReply()) {
                         $value = $answer->getValue(); // will be either 'yes' or 'no'
                         $text = $answer->getText(); // will be either 'Of course' or 'Hell no!'
 
                         if ($value === 'yes') {
-                            $booking_service->review(5, $id);
-                            $bot->reply('Thank you! We are happy that you enjoyed your stay!');
+                            $booking_service->review($bot, 5, $id, $player);
                         } else {
-                            $booking_service->review(1, $id);
-                            $bot->reply('Thank you! We are sad that you did not enjoy your stay!');
-                            $bot->reply('Your refund has been processed.');
+                            $booking_service->review($bot, 1, $id, $player);
                         }
                     }
                 } catch (\Exception $e) {
