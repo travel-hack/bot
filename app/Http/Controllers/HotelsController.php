@@ -76,46 +76,7 @@ class HotelsController extends Controller
             $bot->reply('Ooops! :)');
             return $bot->reply($e->getMessage());
         }
-
-        $bot->reply(substr(json_encode($hotels), 0, 200));
-        return;
-        $list = ListTemplate::create()
-            ->useCompactView();
-
-        foreach ($hotels['results'] as $hotel) {
-            $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
-                ->subtitle($hotel['property_name'] ?? 'N/A')
-                ->image('https://picsum.photos/200/200/?image=' . rand(1, 1000))
-                ->addButton(ElementButton::create('book now -'.$hotel['property_code'])
-                    ->payload('book.hotel '.$hotel['property_code'])
-                    ->type('postback')
-                )
-            );
-        }
-
-        $bot->reply($list);
-
-        //$bot->reply((string) count($hotels['results']));
     }
-
-    /*public function test(BotMan $bot)
-    {
-        $bot->reply(ButtonTemplate::create('Do you want to know more about BotMan?')
-            ->addButton(ElementButton::create('Tell me more')
-                ->type('postback')
-                ->payload('tellmemore')
-            )
-            ->addButton(ElementButton::create('Show me the docs')
-                ->url('http://botman.io/')
-            )
-        );
-    }
-
-    public function book(BotMan $bot, $property_code)
-    {
-        $bot->reply($property_code);
-    }*/
-
 
     public function bookNow(BotMan $bot, $property_code)
     {
@@ -153,14 +114,14 @@ class HotelsController extends Controller
 
     protected function showHotelList(BotMan $bot, $hotels)
     {
-        $count = count($hotels['results']);
+        /*$count = count($hotels);
         if ($count < 2 || $count > 4) {
             return $bot->reply('Are you sure you want to see ' . $count . ' results?');
-        }
+        }*/
 
         $list = ListTemplate::create()
             ->useCompactView();
-        foreach ($hotels['results'] as $hotel) {
+        foreach ($hotels as $hotel) {
             $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
                 ->subtitle($hotel['property_name'] ?? 'N/A')
                 ->image('https://picsum.photos/200/200/?image=' . rand(1, 1000))
@@ -181,9 +142,9 @@ class HotelsController extends Controller
             return $bot->reply('No hotels were found!');
         }
         if ($num == 1) {
-            return $this->showOneHotel($bot, array_pop($hotels));
+            return $this->showOneHotel($bot, array_pop($hotels['results']));
         }
-        return $this->showHotelList($bot, array_slice($hotels, 0, 4));
+        return $this->showHotelList($bot, array_slice($hotels['results'], 0, 4));
     }
 
 
