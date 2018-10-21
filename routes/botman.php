@@ -50,7 +50,7 @@ $botman->hears('(show|display)? (booking|book|reservation|rezervation|resa) {id}
 $botman->hears('book.show {id}', BookingController::class . '@showBooking');
 // cancel booking
 $botman->hears('(cancel|delete)? (booking|book|reservation|rezervation|resa) {id}', BookingController::class . '@cancelBookings');
-$botman->hears('book.cancel {id}', BookingController::class . '@cancelBookings');
+$botman->hears('book.cancel {id}', BookingController::class . '@cancelBooking');
 
 $botman->hears('tripchat.user', function ($bot) {
     try {

@@ -68,9 +68,11 @@ class BookingController extends Controller
 
     public function showBooking(BotMan $bot, string $id)
     {
-        $message = $bot->getMessage()->getExtras();
+        /*$message = $bot->getMessage()->getExtras();
+
+        logger($bot->getMessage()->getText());*/
         
-        $booking = Booking::find($message['apiParameters']['booking-id']);
+        $booking = Booking::find($id);
         if (!$booking) {
             $bot->reply('Ha! Nice try! No such booking :)');
             return;
@@ -79,10 +81,10 @@ class BookingController extends Controller
         return $this->showOneBooking($bot, $booking);
     }
 
-    public function cancelBooking(BotMan $bot)
+    public function cancelBooking(BotMan $bot, string $id)
     {
-        $message = $bot->getMessage()->getExtras();
-        $id = $message['apiParameters']['booking-id'];
+        /*$message = $bot->getMessage()->getExtras();
+        $id = $message['apiParameters']['booking-id'];*/
 
         $success = Booking::where('id', $id)->update(['status' => 'cancelled']);
 
