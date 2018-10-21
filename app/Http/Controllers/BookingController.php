@@ -180,16 +180,24 @@ class BookingController extends Controller
                     Button::create('Hell no!')->value('no'),
                 ]);
 
-            $bot->ask($question, function (Answer $answer) use ($id) {
-                if ($answer->isInteractiveMessageReply()) {
-                    $value = $answer->getValue(); // will be either 'yes' or 'no'
-                    $text = $answer->getText(); // will be either 'Of course' or 'Hell no!'
+            $booking_service = new BookingService;
 
-                    if ($value === 'yes') {
-                        (new BookingService)->review(5, $id);
-                    } else {
-                        (new BookingService)->review(1, $id);
+            $bot->ask($question, function (Answer $answer) use ($bot, $id, $booking_service) {
+                try {
+                    if ($answer->isInteractiveMessageReply()) {
+                        $value = $answer->getValue(); // will be either 'yes' or 'no'
+                        $text = $answer->getText(); // will be either 'Of course' or 'Hell no!'
+
+                        if ($value === 'yes') {
+                            $booking_service->review(5, $id);
+                        } else {
+                            $booking_service->review(1, $id);
+                        }
                     }
+                } catch (\Exception $e) {
+                    \Log::error($e->getMessage() . $e->getTraceAsString());
+                    $bot->reply('Ooops! :)');
+                    return $bot->reply($e->getMessage());
                 }
             });
         } catch (\Exception $e) {
