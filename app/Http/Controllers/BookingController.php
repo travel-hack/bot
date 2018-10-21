@@ -38,10 +38,10 @@ class BookingController extends Controller
                     ->payload('book.show ' . $booking->booking_id)
                     ->type('postback')
                 )
-                ->addButton(ElementButton::create('cancel')
-                    ->payload('book.cancel ' . $booking->booking_id)
-                    ->type('postback')
-                )
+                // ->addButton(ElementButton::create('cancel')
+                //     ->payload('book.cancel ' . $booking->booking_id)
+                //     ->type('postback')
+                // )
             );
         }
         $bot->reply($list);
