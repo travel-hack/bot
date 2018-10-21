@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\BookingService;
 use Illuminate\Http\Request;
 use BotMan\BotMan\BotMan;
 use App\Booking;
@@ -126,19 +127,7 @@ class BookingController extends Controller
 
     protected function showOneBooking(BotMan $bot, Booking $booking)
     {
-        $template = GenericTemplate::create()
-            ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
-            ->addElements([
-                Element::create('Booking')
-                    ->subtitle("Booking $booking->id")
-                    ->image($booking->hotel_image)
-                    ->addButton(ElementButton::create('view')
-                        ->payload('book.show ' . $booking->id)
-                        ->type('postback'))
-                    /*->addButton(ElementButton::create('cancel')
-                        ->payload('book.cancel ' . $booking->id)
-                        ->type('postback')),*/
-            ]);
+        $template = (new BookingService)->showBooking($booking);
         $bot->reply($template);
     }
 
