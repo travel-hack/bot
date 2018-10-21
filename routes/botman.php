@@ -22,6 +22,7 @@ $botman->middleware->received($userInputLogger);
 $botman->hears('Hi|Hello|Ola', function ($bot) {
     try {
         check_user($bot);
+        
         $bot->reply('Smells like a soon to be seasoned traveler :)');
     } catch (\Exception $e) {
         \Log::error($e->getMessage() . $e->getTraceAsString());
