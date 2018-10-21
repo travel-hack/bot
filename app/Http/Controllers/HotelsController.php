@@ -123,11 +123,13 @@ class HotelsController extends Controller
 
             $booking = Booking::create($data);
 
+            $refund = $player->rating > 40 ? 10 : 5;
+
             $contract = Contract::create([
                 'booking_id' => $booking->id,
                 'player_id' => $player->id,
                 'minimum_rating' => 3,
-                'refund' => ($booking->price / 100) * 10,
+                'refund' => ($booking->price / 100) * $refund,
             ]);
 
             $bot->reply("Booking ID: $booking->id");
@@ -141,7 +143,13 @@ class HotelsController extends Controller
 
     protected function showOneHotel(BotMan $bot, $hotel)
     {
+        check_user($bot);
+        $user = $bot->getUser();
+        $user_id = $user->getId();
+        $player = Player::whereFacebookId($user_id)->first();
+
         $data = $this->extractPropertyData($hotel);
+        $data['price'] = $player->rating > 70 ? ($data['price'] / 100 * 95) : $data['price'];
 
         $template = GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
@@ -149,7 +157,7 @@ class HotelsController extends Controller
                 Element::create($hotel['property_name'] ?? 'Ramada Grand Resort')
                     ->subtitle($hotel['address']['line1'] ?? 'Downtown')
                     ->image($data['hotel_image'])
-                    ->addButton(ElementButton::create("book at \${$hotel['total_price']['amount']}")
+                    ->addButton(ElementButton::create("book at \${$data['price']}")
                         ->payload('book.now ' . json_encode($data))
                         ->type('postback')
                     )
@@ -159,19 +167,20 @@ class HotelsController extends Controller
 
     protected function showHotelList(BotMan $bot, $hotels)
     {
-        /*$count = count($hotels);
-        if ($count < 2 || $count > 4) {
-            return $bot->reply('Are you sure you want to see ' . $count . ' results?');
-        }*/
+        check_user($bot);
+        $user = $bot->getUser();
+        $user_id = $user->getId();
+        $player = Player::whereFacebookId($user_id)->first();
 
         $list = ListTemplate::create()
             ->useCompactView();
         foreach ($hotels as $hotel) {
             $data = $this->extractPropertyData($hotel);
+            $data['price'] = $player->rating > 70 ? ($data['price'] / 100 * 95) : $data['price'];
             $list->addElement(Element::create($hotel['property_name'] ?? 'Ramada Grand Resort')
                 ->subtitle($hotel['address']['line1'] ?? 'Downtown')
                 ->image($data['hotel_image'])
-                ->addButton(ElementButton::create("book at \${$hotel['total_price']['amount']}")
+                ->addButton(ElementButton::create("book at \${$data['price']}")
                     ->payload('book.now ' . json_encode($data))
                     ->type('postback')
                 )
