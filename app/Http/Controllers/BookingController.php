@@ -117,11 +117,12 @@ class BookingController extends Controller
         $id = $message['apiParameters']['booking-id'];*/
 
         try {
+            $booking = Booking::find($id);
             $b = Booking::where('id', $id)->update(['status' => 'cancelled']);
             $c = Contract::where('booking_id', $id)->update(['status' => 'closed']);
 
             if($b && $c) {
-                $bot->reply("Cancelled id " . $id);
+                $bot->reply("I went ahead and canceled your booking $id with hotel $booking->hotel_name");
             }
         } catch (\Exception $e) {
             \Log::error($e->getMessage() . $e->getTraceAsString());
@@ -146,8 +147,8 @@ class BookingController extends Controller
         $list = ListTemplate::create()
             ->useCompactView();
         foreach ($bookings as $booking) {
-            $list->addElement(Element::create('Booking')
-                ->subtitle("$booking->id at $booking->hotel_name")
+            $list->addElement(Element::create($booking->hotel_name)
+                ->subtitle("Booking code: $booking->id")
                 ->image($booking->hotel_image)
                 ->addButton(ElementButton::create('view')
                     ->payload('book.show ' . $booking->id)
