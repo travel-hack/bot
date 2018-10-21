@@ -41,7 +41,7 @@ class BookingController extends Controller
                 )
             );
         }
-        $bot->reply('list');
+        $bot->reply($list);
 
         // $response = "Active Bookings: ";
 
