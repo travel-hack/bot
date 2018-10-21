@@ -147,8 +147,8 @@ class BookingController extends Controller
         $list = ListTemplate::create()
             ->useCompactView();
         foreach ($bookings as $booking) {
-            $list->addElement(Element::create('Booking')
-                ->subtitle("$booking->id at $booking->hotel_name")
+            $list->addElement(Element::create($booking->hotel_name)
+                ->subtitle("Booking code: $booking->id")
                 ->image($booking->hotel_image)
                 ->addButton(ElementButton::create('view')
                     ->payload('book.show ' . $booking->id)
