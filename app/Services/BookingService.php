@@ -37,7 +37,7 @@ class BookingService
         $player->bookings_total = $player->bookings_total + $booking->price;
 
         if ($rating >= $booking->contract->minimum_rating) {
-            $diff = floor((100 - $player->rating) * min($booking->price / ($player->bookings_total / ($player->bookings_count + 1)), 2) / 3);
+            $diff = floor((100 - $player->rating) * min($booking->price / ($player->bookings_total / ($player->bookings_count + 1)), 2) / max(3, $player->bookings_count));
 
             $booking->update(['status' => 'closed']);
             $booking->contract->update(['status' => 'closed']);
@@ -45,7 +45,7 @@ class BookingService
 
             $player->rating = $player->rating + $diff;
         } else {
-            $diff = floor($player->rating * min($booking->price / ($player->bookings_total / ($player->bookings_count + 1)), 2) / 3);
+            $diff = floor($player->rating * min($booking->price / ($player->bookings_total / ($player->bookings_count + 1)), 2) / max(3, $player->bookings_count));
 
             $booking->update(['status' => 'closed']);
             $booking->contract->update(['status' => 'refunded']);
