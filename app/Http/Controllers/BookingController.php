@@ -66,7 +66,7 @@ class BookingController extends Controller
             check_user($bot);
             $user = $bot->getUser();
             $user_id = $user->getId();
-            $user = $player = Player::whereFacebookId($user_id)->first();
+            $player = Player::whereFacebookId($user_id)->first();
 
             if (!$player) {
                 return $bot->reply('This is akward Mr/Mrs ' . $user_id . '.I dont know who you are.');
@@ -118,25 +118,6 @@ class BookingController extends Controller
         }
     }
 
-    protected function replyWithTemplate(BotMan $bot, $collection)
-    {
-        $bot->reply(ListTemplate::create()
-            ->useCompactView()
-            ->addGlobalButton(ElementButton::create('view more')
-                ->url('http://test.at'))
-            ->addElement(Element::create('BotMan Documentation')
-                ->subtitle('All about BotMan')
-                ->image('http://botman.io/img/botman-body.png')
-                ->addButton(ElementButton::create('tell me more')
-                    ->payload('tellmemore')
-                    ->type('postback')))
-            ->addElement(Element::create('BotMan Laravel Starter')
-                ->subtitle('This is the best way to start with Laravel and BotMan')
-                ->image('http://botman.io/img/botman-body.png')
-                ->addButton(ElementButton::create('visit')
-                    ->url('https://github.com/mpociot/botman-laravel-starter'))));
-    }
-
     protected function showOneBooking(BotMan $bot, Booking $booking)
     {
         $template = GenericTemplate::create()
@@ -144,6 +125,7 @@ class BookingController extends Controller
             ->addElements([
                 Element::create('Booking')
                     ->subtitle("Booking $booking->id")
+                    ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
                     ->addButton(ElementButton::create('view')
                         ->payload('book.show ' . $booking->id)
                         ->type('postback'))
@@ -166,6 +148,7 @@ class BookingController extends Controller
         foreach ($bookings as $booking) {
             $list->addElement(Element::create('Booking')
                 ->subtitle("Booking $booking->id")
+                ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
                 ->addButton(ElementButton::create('view')
                     ->payload('book.show ' . $booking->id)
                     ->type('postback'))
