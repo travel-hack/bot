@@ -10,7 +10,7 @@ class PlayerController extends Controller
 
     public function allPlayers()
     {
-        return Player::all();
+        return Player::orderBy('rating','desc')->get();
     }
     
     public function getPlayer(int $id) 
