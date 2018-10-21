@@ -68,7 +68,7 @@ class HotelsController extends Controller
         $hotels = $this->hotels_service->searchFromDebug(compact('location', 'check_in', 'check_out'));
         $hotels = json_decode($hotels, true);
 
-        return $this->showHotelList($bot, $hotels);
+        return $this->replyWithHotels($bot, $hotels);
 
         $bot->reply(substr(json_encode($hotels), 0, 200));
         return;

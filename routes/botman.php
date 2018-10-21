@@ -46,7 +46,7 @@ $botman->hears('book.show {id}', BookingController::class . '@showBooking');
 $botman->hears('(cancel|delete)? (booking|book|reservation|rezervation|resa) {id}', BookingController::class . '@cancelBookings');
 $botman->hears('book.cancel {id}', BookingController::class . '@cancelBookings');
 
-$botman->hears('user', function ($bot) {
+$botman->hears('tripchat.user', function ($bot) {
     try {
         logger('user: ' . $bot->getSender());
     } catch (\Exception $e) {
