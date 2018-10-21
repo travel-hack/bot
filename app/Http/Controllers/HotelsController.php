@@ -50,7 +50,6 @@ class HotelsController extends Controller
             ->addGlobalButton(ElementButton::create('view more')
                 ->url('http://test.at')
             );
-
         foreach ($hotels as $hotel) {
             $list->addElement(Element::create($hotel->property_name ?? 'N/A')
                 ->subtitle($hotel->property_name ?? 'N/A')
