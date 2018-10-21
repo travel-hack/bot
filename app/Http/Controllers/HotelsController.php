@@ -90,8 +90,8 @@ class HotelsController extends Controller
             return $bot->reply($e->getMessage());
         }
     }
-
-    public function bookNow(BotMan $bot, $property_code)
+    
+    public function bookNow(BotMan $bot, $data)
     {
         try {
             check_user($bot);
@@ -108,15 +108,14 @@ class HotelsController extends Controller
 
             \Log::info(json_encode($player));
 
-            return botman_log($bot, $property_code);
+            //return botman_log($bot, $property_code);
 
-            Booking::create([
-                'hotel_id' => $property_code,
-                'data' => [],
-                'status' => 'active'
-            ]);
+            $data = \GuzzleHttp\json_decode($data, true);
+            $data['player_id'] = $player->id;
 
-            $bot->reply('Booked: '. $property_code);
+            Booking::create($data);
+
+            $bot->reply('Booked: '. $data['hotel_id']);
         } catch (\Exception $e) {
             \Log::error($e->getMessage() . $e->getTraceAsString());
             $bot->reply('Ooops! :)');
@@ -130,14 +129,13 @@ class HotelsController extends Controller
         $template = GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
             ->addElements([
-                Element::create('BotMan Documentation')
-                    ->subtitle('All about BotMan')
-                    ->image('https://www.clipartmax.com/png/middle/117-1179176_office-block-free-icon-office-building-flat-icon.png')
-                    ->addButton(ElementButton::create('visit')
-                        ->url('http://botman.io'))
-                    ->addButton(ElementButton::create('tell me more')
-                        ->payload('tellmemore')
-                        ->type('postback')),
+                Element::create($hotel['property_name'] ?? 'N/A')
+                    ->subtitle($hotel['property_name'] ?? 'N/A')
+                    ->image('https://picsum.photos/200/200/?image=' . rand(1, 1000))
+                    ->addButton(ElementButton::create('book now')
+                        ->payload('book.now ' . json_encode($this->extractPropertyData($hotel)))
+                        ->type('postback')
+                    )
             ]);
         $bot->reply($template);
     }
@@ -155,13 +153,25 @@ class HotelsController extends Controller
             $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
                 ->subtitle($hotel['property_name'] ?? 'N/A')
                 ->image('https://picsum.photos/200/200/?image=' . rand(1, 1000))
-                ->addButton(ElementButton::create('book now -' . $hotel['property_code'])
-                    ->payload('book.now ' . json_encode(['a' => 'b', 'c' => 'd', 'e' => 'f']))
+                ->addButton(ElementButton::create('book now')
+                    ->payload('book.now ' . json_encode($this->extractPropertyData($hotel)))
                     ->type('postback')
                 )
             );
         }
         $bot->reply($list);
+    }
+
+    protected function extractPropertyData($hotel)
+    {
+        return [
+            'hotel_id' => $hotel['property_code'],
+            'hotel_name' => $hotel['property_name'],
+            'hotel_image' => 'https://picsum.photos/200/200/?image=' . rand(1, 1000),
+            'check_in' => $hotel['rooms'][0]['rates'][0]['start_date'],
+            'check_out' => $hotel['rooms'][0]['rates'][0]['end_date'],
+            'price' => $hotel['total_price'],
+        ];
     }
 
     protected function replyWithHotels(BotMan $bot, $hotels)

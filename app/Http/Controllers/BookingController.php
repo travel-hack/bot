@@ -12,6 +12,7 @@ use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use App\Services\PlayerService;
+use function GuzzleHttp\json_encode;
 
 
 class BookingController extends Controller
@@ -60,17 +61,31 @@ class BookingController extends Controller
 
     public function allMyBookings(BotMan $bot)
     {
-        $bookings = Booking::all();
+        try {
+            check_user($bot);
+            $user = $bot->getUser();
+            $user_id = $user->getId();
+            $user = $player = Player::whereFacebookId($user_id)->first();
 
-        $this->replyWithTemplate($bot, $bookings);
+            if (!$player) {
+                return $bot->reply('This is akward Mr/Mrs ' . $user_id . '.I dont know who you are.');
+            }
+            
+            $bookings = $user->bookings()->get();
+
+            $bot->reply(json_encode($bookings));
+            
+        } catch (\Exception $e) {
+            
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
+       
     }
 
     public function showBooking(BotMan $bot, string $id)
     {
-        /*$message = $bot->getMessage()->getExtras();
-
-        logger($bot->getMessage()->getText());*/
-
         try {
             $booking = Booking::find($id);
             if (!$booking) {
