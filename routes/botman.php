@@ -28,7 +28,7 @@ $botman->hears('Hi|Hello|Yo|Ola', function ($bot) {
  * Hotel search
  */
 // $botman->hears('hotel.search', HotelsController::class . '@botman')->middleware($dialogflow);
-$botman->hears('search hotels in {location} between {check_in} and {check_out}', HotelsController::class . '@debug');
+// $botman->hears('search hotels in {location} between {check_in} and {check_out}', HotelsController::class . '@debug');
 
 $botman->hears('(.*)(search|hotel|place|find|go)(.*)(in|to) {location}', HotelsController::class . '@custom');
 
