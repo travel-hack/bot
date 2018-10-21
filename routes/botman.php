@@ -5,7 +5,7 @@ use App\Http\Controllers\HotelsController;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Middleware\UserInputLogger;
 use App\Http\Middleware\NewPlayers;
-
+use Log;
 
 $botman = resolve('botman');
 
@@ -18,7 +18,7 @@ $userInputLogger = new UserInputLogger();
 $newPlayers = new NewPlayers();
 
 $botman->middleware->received($userInputLogger);
-$botman->middleware->received($newPlayers);
+//$botman->middleware->received($newPlayers);
 
 $botman->hears('Hi|Hello|Yo|Ola', function ($bot) {
     $bot->reply('Smells like a soon to be seasoned traveler :)');
@@ -44,3 +44,12 @@ $botman->hears('(show|list)?\s?(me)?\s?all\s?(my)?\s(bookings|books|reservations
 $botman->hears('(show|display)? (booking|book|reservation|rezervation|resa) {id}', BookingController::class . '@showBookings');
 // cancel booking
 $botman->hears('(cancel|delete)? (booking|book|reservation|rezervation|resa) {id}', BookingController::class . '@cancelBookings');
+
+$botman->hears('user', function ($bot) {
+    try {
+        Log::info('user: ' . $bot->getSender());
+    } catch (\Exception $e) {
+        Log::error($e->getTraceAsString());
+    }
+    $bot->reply('Hello User!');
+});
