@@ -22,6 +22,7 @@ class CreatePlayersTable extends Migration
             $table->string('avatar_url');
             $table->integer('rating');
             $table->decimal('bookings_total');
+            $table->integer('bookings_count')->default(0);
             $table->timestamps();
         });
     }
