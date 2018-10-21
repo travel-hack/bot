@@ -23,8 +23,6 @@ class PlayerService
         $firstname = $user->getFirstName();
         $lastname  = $user->getLastName();
 
-        \Log::info('user info' . print_r($user->getInfo(), true));
-
         $newUser = Player::where('facebook_id', $user_id)->get();
 
         if($newUser->isEmpty()) {
@@ -33,12 +31,25 @@ class PlayerService
                     'facebook_id'    => $user_id,
                     'firstname'      => $firstname,
                     'lastname'       => $lastname,
-                    'avatar_url'     => "https://via.placeholder.com/50x50",
+                    'avatar_url'     => $this->getUserPhoto($user),
                     'rating'         => 60,
                     'bookings_total' => 0,
                 ]
             );
             $newUser->save();
+        }
+    }
+
+    protected function getUserPhoto($user)
+    {
+        try {
+            $info = $user->getInfo();
+            if (array_key_exists('profile_pic', $info)) {
+                return $info['profile_pic'];
+            }
+            return 'https://via.placeholder.com/50x50';
+        } catch (\Exception $e) {
+            return 'https://via.placeholder.com/50x50';
         }
     }
 }
