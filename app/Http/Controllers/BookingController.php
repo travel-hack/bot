@@ -9,6 +9,7 @@ use function GuzzleHttp\json_decode;
 use Illuminate\Support\Collection;
 
 use BotMan\Drivers\Facebook\Extensions\ListTemplate;
+use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 
