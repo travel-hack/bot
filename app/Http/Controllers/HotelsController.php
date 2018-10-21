@@ -68,6 +68,8 @@ class HotelsController extends Controller
         $hotels = $this->hotels_service->searchFromDebug(compact('location', 'check_in', 'check_out'));
         $hotels = json_decode($hotels, true);
 
+        $bot->reply(json_encode($hotels));
+        return;
         $list = ListTemplate::create()
             ->useCompactView();
 
