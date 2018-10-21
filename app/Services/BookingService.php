@@ -16,12 +16,8 @@ class BookingService
         return GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
             ->addElements([
-                Element::create('Booking')
-                    ->subtitle("$booking->hotel_name -
-                     Refund %: $contract->refund - 
-                     Minimum Rating: $contract->minimum_rating -
-                     Price: $booking->price - 
-                     Booking code: $booking->id")
+                Element::create($booking->hotel_name)
+                    ->subtitle("Booking code: $booking->id - $booking->price$ - Refund: $contract->refund - Minimum Rating: $contract->minimum_rating")
                     ->image($booking->hotel_image)
                     ->addButton(ElementButton::create('visit')
                         ->payload('book.visit ' . $booking->id)
