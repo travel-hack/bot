@@ -13,7 +13,6 @@ use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 
-use App\Services\PlayerService;
 
 class BookingController extends Controller
 {
@@ -27,8 +26,8 @@ class BookingController extends Controller
     public function myBookings(BotMan $bot)
     {
         \Log::info('inside');
-        check_user();
-        (new PlayerService())->check($bot);
+        check_user($bot);
+
         $bookings = Booking::where('status', 'active')->get();
 
         $bot->reply(json_encode($bookings->all()));

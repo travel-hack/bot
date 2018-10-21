@@ -1,6 +1,8 @@
 <?php
 
-function check_user()
+use App\Services\PlayerService;
+
+function check_user($bot)
 {
-    Log::info('test');
+    (new PlayerService())->check($bot);
 }
