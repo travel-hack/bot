@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Booking;
+use App\Contract;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
@@ -29,5 +30,18 @@ class BookingService
                         ->payload('book.cancel ' . $booking->id)
                         ->type('postback')),
             ]);
+    }
+
+    public function review($rating, $booking_id)
+    {
+        $booking = Booking::find($booking_id);
+
+        if ($rating >= $booking->contract->minimum_rating) {
+            $booking->update(['status' => 'closed']);
+            $booking->contract->update(['status' => 'closed']);
+        } else {
+            $booking->update(['status' => 'closed']);
+            $booking->contract->update(['status' => 'refunded']);
+        }
     }
 }

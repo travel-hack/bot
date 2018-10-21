@@ -83,6 +83,7 @@ class HotelsController extends Controller
     public function custom(BotMan $bot, $location)
     {
         try {
+            $bot->typesAndWaits(2);
             $hotels = $this->hotels_service->searchFromDebug([
                 'location' => $location, 
                 'check_in' => '11-20',

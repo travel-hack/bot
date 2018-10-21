@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Contract;
 use App\Services\BookingService;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Illuminate\Http\Request;
 use BotMan\BotMan\BotMan;
 use App\Booking;
@@ -171,7 +174,24 @@ class BookingController extends Controller
     public function visit(BotMan $bot, $id)
     {
         try {
-            $bot->reply("visiting " . $id);
+            $question = Question::create('Did you like your stay?')
+                ->addButtons([
+                    Button::create('Of course')->value('yes'),
+                    Button::create('Hell no!')->value('no'),
+                ]);
+
+            $bot->ask($question, function (Answer $answer) use ($id) {
+                if ($answer->isInteractiveMessageReply()) {
+                    $value = $answer->getValue(); // will be either 'yes' or 'no'
+                    $text = $answer->getText(); // will be either 'Of course' or 'Hell no!'
+
+                    if ($value === 'yes') {
+                        (new BookingService)->review(5, $id);
+                    } else {
+                        (new BookingService)->review(1, $id);
+                    }
+                }
+            });
         } catch (\Exception $e) {
             \Log::error($e->getMessage() . $e->getTraceAsString());
             $bot->reply('Ooops! :)');
