@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contract;
 use App\Services\BookingService;
 use Illuminate\Http\Request;
 use BotMan\BotMan\BotMan;
@@ -113,9 +114,10 @@ class BookingController extends Controller
         $id = $message['apiParameters']['booking-id'];*/
 
         try {
-            $success = Booking::where('id', $id)->update(['status' => 'cancelled']);
+            $b = Booking::where('id', $id)->update(['status' => 'cancelled']);
+            $c = Contract::where('booking_id', $id)->update(['status' => 'closed']);
 
-            if($success) {
+            if($b && $c) {
                 $bot->reply("Cancelled id " . $id);
             }
         } catch (\Exception $e) {
@@ -164,5 +166,16 @@ class BookingController extends Controller
             return $this->showOneBooking($bot, $bookings->first());
         }
         return $this->showBookingList($bot, $bookings);
+    }
+
+    public function visit(BotMan $bot, $id)
+    {
+        try {
+            $bot->reply("visiting " . $id);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
     }
 }
