@@ -153,14 +153,14 @@ class HotelsController extends Controller
 
     protected function showHotelList(BotMan $bot, $hotels)
     {
-        $count = count($hotels);
+        $count = count($hotels['results']);
         if ($count < 2 || $count > 4) {
             return $bot->reply('Are you sure you want to see ' . $count . ' results?');
         }
 
         $list = ListTemplate::create()
             ->useCompactView();
-        foreach ($hotels as $hotel) {
+        foreach ($hotels['results'] as $hotel) {
             $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
                 ->subtitle($hotel['property_name'] ?? 'N/A')
                 ->image('https://picsum.photos/200/200/?image=' . rand(1, 1000))

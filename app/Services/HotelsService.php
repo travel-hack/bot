@@ -40,6 +40,8 @@ class HotelsService
 
         $response = $this->client->get($full_url);
 
+        //logger(json_encode($response->getBody()->getContents()));
+
         return $response->getBody()->getContents();
     }
 
@@ -48,9 +50,9 @@ class HotelsService
         $period = explode('/', $message['period']);
 
         $query = [
-            'query' => $message['location']->city ?? null,
+            'query' => $message['location']->city,
             'check_in' => $period[0],
-            'check_out' => $period[1] ?? '2018-10-10',
+            'check_out' => $period[1],
             'number_of_results' => 4,
         ];
 
