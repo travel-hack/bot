@@ -9,6 +9,7 @@ use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\ListTemplate;
+use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 use Illuminate\Http\Request;
 
 class HotelsController extends Controller
@@ -65,8 +66,16 @@ class HotelsController extends Controller
 
     public function debug(BotMan $bot, $location, $check_in, $check_out)
     {
-        $hotels = $this->hotels_service->searchFromDebug(compact('location', 'check_in', 'check_out'));
-        $hotels = json_decode($hotels, true);
+        try {
+            $hotels = $this->hotels_service->searchFromDebug(compact('location', 'check_in', 'check_out'));
+            $hotels = json_decode($hotels, true);
+
+            return $this->replyWithHotels($bot, $hotels);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
 
         $bot->reply(substr(json_encode($hotels), 0, 200));
         return;
@@ -76,7 +85,7 @@ class HotelsController extends Controller
         foreach ($hotels['results'] as $hotel) {
             $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
                 ->subtitle($hotel['property_name'] ?? 'N/A')
-                ->image('https://picsum.photos/200/?random')
+                ->image('https://picsum.photos/200/200/?image=' . rand(1, 1000))
                 ->addButton(ElementButton::create('book now -'.$hotel['property_code'])
                     ->payload('book.hotel '.$hotel['property_code'])
                     ->type('postback')
@@ -118,5 +127,64 @@ class HotelsController extends Controller
 
         $bot->reply('Booked: '. $property_code);
     }
+
+
+    protected function showOneHotel(BotMan $bot, $hotel)
+    {
+        $template = GenericTemplate::create()
+            ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
+            ->addElements([
+                Element::create('BotMan Documentation')
+                    ->subtitle('All about BotMan')
+                    ->image('https://www.clipartmax.com/png/middle/117-1179176_office-block-free-icon-office-building-flat-icon.png')
+                    ->addButton(ElementButton::create('visit')
+                        ->url('http://botman.io'))
+                    ->addButton(ElementButton::create('tell me more')
+                        ->payload('tellmemore')
+                        ->type('postback')),
+                Element::create('BotMan Laravel Starter')
+                    ->subtitle('This is the best way to start with Laravel and BotMan')
+                    ->image('http://botman.io/img/botman-body.png')
+                    ->addButton(ElementButton::create('visit')
+                        ->url('https://github.com/mpociot/botman-laravel-starter')),
+            ]);
+        $bot->reply($template);
+    }
+
+    protected function showHotelList(BotMan $bot, $hotels)
+    {
+        $count = count($hotels);
+        if ($count < 2 || $count > 4) {
+            return $bot->reply('Are you sure you want to see ' . $count . ' results?');
+        }
+
+        $list = ListTemplate::create()
+            ->useCompactView();
+        foreach ($hotels as $booking) {
+            $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
+                ->subtitle($hotel['property_name'] ?? 'N/A')
+                ->image('https://picsum.photos/200/200/?image=' . rand(1, 1000))
+                ->addButton(ElementButton::create('book now -' . $hotel['property_code'])
+                    ->payload('book.hotel ' . $hotel['property_code'])
+                    ->type('postback')
+                )
+            );
+        }
+        $bot->reply($list);
+    }
+
+    protected function replyWithHotels(BotMan $bot, $hotels)
+    {
+        $num  = count($hotels['results']);
+        \Log::info('num: ' . $num);
+        if ($num == 0) {
+            return $bot->reply('No hotels were found!');
+        }
+        if ($num == 1) {
+            return $this->showOneHotel($bot, array_pop($hotels));
+        }
+        return $this->showHotelList($bot, array_slice($hotels, 0, 4));
+    }
+
 
 }
