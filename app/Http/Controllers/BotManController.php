@@ -55,11 +55,11 @@ class BotManController extends Controller
     protected function getMessage($name)
     {
         $answers = [
-            "Hello $name! Not the best weather we’re having today . How may I assist you ?",
-            "Good day $name !Hope the hackaton is going great !Is there anything I can do for you today ?",
-            "Greeting $name !Where would you like to travel ? The weather in Barcelona is great this month .",
-            "Hi $name !What does the traveler and the tourist have in common ? They both use TripChat !What’s your next stop ?",
-            "Hi there $name !I will be your personal travel assistant . Where should we travel to ?",
+            "Hello $name! Seems to be cloudy today in Bucharest. How may I assist you? :)",
+            "Good day $name! Hope this hackaton is going great! Is there anything I can do for you today? :)",
+            "Greetings $name! Where would you like to travel? May I suggest Madrid?",
+            "Hi $name! Do you know what the traveler and the tourist have in common? They both use TripChat! What’s your next stop?  :)",
+            "Hi there $name! Happy to be your personal travel assistant! Where should we travel today?",
         ];
         $key = rand(0, count($answers) - 1);
         return $answers[$key];

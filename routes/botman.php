@@ -18,7 +18,7 @@ $userInputLogger = new UserInputLogger();
 
 $botman->middleware->received($userInputLogger);
 //$botman->middleware->heard($newPlayers);
-$botman->hears('Hi|Hello', BotManController::class . '@greetings');
+$botman->hears('Hi|Hello|Hey|Salut|Buna', BotManController::class . '@greetings');
 
 // $botman->hears('Start conversation', BotManController::class.'@startConversation');
 
