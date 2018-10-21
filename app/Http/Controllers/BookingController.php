@@ -62,7 +62,6 @@ class BookingController extends Controller
 
     public function allMyBookings(BotMan $bot)
     {
-        myBookings
         try {
             check_user($bot);
             $user = $bot->getUser();
