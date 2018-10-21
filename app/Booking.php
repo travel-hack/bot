@@ -18,5 +18,4 @@ class Booking extends Model
     protected $casts = [
         'data' => 'array'
     ];
-
 }
