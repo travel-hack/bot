@@ -53,7 +53,7 @@ class HotelsController extends Controller
         foreach ($hotels as $hotel) {
             $list->addElement(Element::create($hotel->property_name ?? 'N/A')
                 ->subtitle($hotel->property_name ?? 'N/A')
-                ->image('https://picsum.photos/200/?random')
+                ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
                 ->addButton(ElementButton::create('visit')
                     ->url('https://helloromania.eu/hotel')
                 )
@@ -138,7 +138,7 @@ class HotelsController extends Controller
             ->addElements([
                 Element::create($hotel['property_name'] ?? 'N/A')
                     ->subtitle($hotel['property_name'] ?? 'N/A')
-                    ->image('https://picsum.photos/200/200/?image=' . rand(1, 1000))
+                    ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
                     ->addButton(ElementButton::create('book now')
                         ->payload('book.now ' . json_encode($this->extractPropertyData($hotel)))
                         ->type('postback')
@@ -159,7 +159,7 @@ class HotelsController extends Controller
         foreach ($hotels as $hotel) {
             $list->addElement(Element::create($hotel['property_name'] ?? 'N/A')
                 ->subtitle($hotel['property_name'] ?? 'N/A')
-                ->image('https://picsum.photos/200/200/?image=' . rand(1, 1000))
+                ->image('https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg')
                 ->addButton(ElementButton::create('book now')
                     ->payload('book.now ' . json_encode($this->extractPropertyData($hotel)))
                     ->type('postback')
@@ -174,7 +174,7 @@ class HotelsController extends Controller
         return [
             'hotel_id' => $hotel['property_code'],
             'hotel_name' => $hotel['property_name'],
-            'hotel_image' => 'https://picsum.photos/200/200/?image=' . rand(1, 1000),
+            'hotel_image' => 'https://bot.tripchat.fun/images/hotel-' . rand(1, 50) . '.jpeg',
             'check_in' => $hotel['rooms'][0]['rates'][0]['start_date'],
             'check_out' => $hotel['rooms'][0]['rates'][0]['end_date'],
             'price' => $hotel['total_price']['amount'],
