@@ -33,7 +33,10 @@ class BookingService
     {
         $booking = Booking::find($booking_id);
 
-        $player_rating = floor((100 - $player->rating) * min($booking->price / ($player->bookings_total / ($player->bookings_count + 1)), 2) / 3);
+        $player->bookings_count = $player->bookings_count + 1;
+        $player->bookings_total = $player->bookings_total + $booking->price;
+
+        $player->rating = floor((100 - $player->rating) * min($booking->price / ($player->bookings_total / ($player->bookings_count + 1)), 2) / 3);
 
         if ($rating >= $booking->contract->minimum_rating) {
             $booking->update(['status' => 'closed']);
@@ -46,9 +49,9 @@ class BookingService
             $bot->reply('Thank you! We appreciate your honest feedback!');
             $bot->reply("Your refund (\${$booking->contract->refund}) has been processed.");
 
-            $player_rating = -$player_rating;
+            $player->rating = -$player->rating;
         }
 
-        $player->update(['rating' => $player_rating]);
+        $player->save();
     }
 }
