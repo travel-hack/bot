@@ -80,13 +80,19 @@ class HotelsController extends Controller
 
     public function bookNow(BotMan $bot, $property_code)
     {
-        Booking::create([
-            'hotel_id' => $property_code,
-            'data' => [],
-            'status' => 'active'
-        ]);
+        try {
+            Booking::create([
+                'hotel_id' => $property_code,
+                'data' => [],
+                'status' => 'active'
+            ]);
 
-        $bot->reply('Booked: '. $property_code);
+            $bot->reply('Booked: '. $property_code);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . $e->getTraceAsString());
+            $bot->reply('Ooops! :)');
+            return $bot->reply($e->getMessage());
+        }
     }
 
 
@@ -103,11 +109,6 @@ class HotelsController extends Controller
                     ->addButton(ElementButton::create('tell me more')
                         ->payload('tellmemore')
                         ->type('postback')),
-                Element::create('BotMan Laravel Starter')
-                    ->subtitle('This is the best way to start with Laravel and BotMan')
-                    ->image('http://botman.io/img/botman-body.png')
-                    ->addButton(ElementButton::create('visit')
-                        ->url('https://github.com/mpociot/botman-laravel-starter')),
             ]);
         $bot->reply($template);
     }
